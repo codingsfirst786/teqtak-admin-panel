@@ -36,7 +36,6 @@ const UserProfile = ({ user, onBack }) => {
                 >
                     <Avatar alt={user.name} src={user.image} sx={{ width: '100%', height: 'auto', maxWidth: '150px', border: `2px solid ${colors.grey[100]}` }} />
                 </Box>
-                {/* Right side: User Data */}
                 <Box
                     flexBasis={{ xs: '100%', sm: '70%' }}
                     backgroundColor={colors.primary[400]}

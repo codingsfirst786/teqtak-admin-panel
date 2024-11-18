@@ -67,11 +67,10 @@ const GetJobs = () => {
   const [count, setCount] = useState(0)
   // ////////////////////////////////////////////// //
   const [jobs, setJobs] = useState([])
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/jobs`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/jobs`)
         const result = await response.data;
         console.log("Fetched data:", result);
         console.log("count is");
@@ -97,7 +96,7 @@ const GetJobs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box m="20px">
+    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
       <Box
         display="grid"
         gridTemplateColumns="repeat(6, 3fr)"

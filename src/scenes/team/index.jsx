@@ -211,6 +211,7 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, useTheme, Button, Avatar } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import StarIcon from '@mui/icons-material/Star';
 import { tokens } from "../../theme";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import TrafficIcon from "@mui/icons-material/Traffic";
@@ -220,8 +221,12 @@ import StatBox from "../../components/StatBox";
 import Header from "../../components/Header";
 import axios from "axios";
 import img from '../podcast/image1.jpeg'
+import UserVideo from "../../components/UserVideo";
+import UserPodcast from "../../components/UserPodcast";
+import UserEvents from "../../components/UserEvents";
+import UserJobs from "../../components/UserJobs";
 
-const Team = () => {
+const Team = ({onBack, userId}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [team, setTeam] = useState([]); // State to hold fetched data
@@ -233,7 +238,7 @@ const Team = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/admin/allusers
+      const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/allusers
 `);
       return response.data;
     } catch (error) {
@@ -263,21 +268,18 @@ const Team = () => {
     getData();
   }, []);
 
-  const DailyEnterpreneurHandle = () => {
-    navigate('/dailyEnterpreneur');
+  const DailyUserHandle = () => {
+    navigate('/dailyuser');
   };
 
-  const WeeklyEnterpreneurHandle = () => {
-    navigate('/weeklyEnterpreneur');
+  const WeeklyUserHandle = () => {
+    navigate('/weeklyuser');
   };
 
-  const MonthlyEnterpreneurHandle = () => {
-    navigate('/monthlyEnterpreneur');
+  const MonthlyUserHandle = () => {
+    navigate('/monthlyuser');
   };
 
-  const TotalEnterpreneurHandle = () => {
-    navigate('/totalyEnterpreneur');
-  };
 
   const handleViewProfileClick = (user) => {
     setSelectedUser(user); // Set selected user for profile view
@@ -286,19 +288,31 @@ const Team = () => {
   const handleBackClick = () => {
     setSelectedUser(null); // Reset to show the table
   };
+  const handlepodcast = () => {
+    navigate('/dailyenterpreneurpodcast')
+  }
+  const handlevideo = () => {
+    navigate('/dailyenterpreneurvideo')
+  }
+  const handlejobs = () => {
+    navigate('/dailyenterpreneurjobs')
+  }
+  const handleevents = () => {
+    navigate('/dailyenterpreneurevents')
+  }
 
-  const deActivateUser = async (id) =>{
-    const data = {"isBlocked":"true"}
-    console.log('deavtivating ',id)
-    const req = await fetch(`http://localhost:5000/users/${id}`,{
-      method:'PUT',
+  const deActivateUser = async (id) => {
+    const data = { "isBlocked": "true" }
+    console.log('deavtivating ', id)
+    const req = await fetch(`http://localhost:5000/users/${id}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json' // Set the correct content-type header
       },
-      body:JSON.stringify(data)
+      body: JSON.stringify(data)
     })
     const d = await req.json()
-    console.log({d})
+    console.log({ d })
   }
   const handleActiveToggle = (userId) => {
     const updatedEntrepreneurData = team.map((user) =>
@@ -361,9 +375,9 @@ const Team = () => {
             variant="contained"
             color={params.row.active ? "success" : "error"}
             onClick={() => {
-            handleActiveToggle(params.row.Users_PK);
-            console.log(params.row.Users_PK)
-            deActivateUser(params.row.Users_PK)
+              handleActiveToggle(params.row.Users_PK);
+              console.log(params.row.Users_PK)
+              deActivateUser(params.row.Users_PK)
             }}
           >
             {params.row.active ? "Deactivate" : "Activate"}
@@ -373,43 +387,173 @@ const Team = () => {
     },
   ];
 
+ // State to control the video modal visibility
+ const [openVedioModal, setOpenVideoModal] = useState(false);
+ const [openPodcastModal, setOpenPodcastModal] = useState(false);
+ const [openEventsModal, setOpenEventsModal] = useState(false);
+ const [openJobsModal, setOpenJobsModal] = useState(false);
+
+ // Handler for modal
+ const handleOpenVideoModal = () => setOpenVideoModal(true);
+ const handleCloseVideoModal = () => setOpenVideoModal(false);
+ const handleOpenPodcastModal = () => setOpenPodcastModal(true);
+ const handleClosePodcastModal = () => setOpenPodcastModal(false);
+ const handleOpenEventsModal = () => setOpenEventsModal(true);
+ const handleCloseEventsModal = () => setOpenEventsModal(false);
+ const handleOpenJobsModal = () => setOpenJobsModal(true);
+ const handleCloseJobsModal = () => setOpenJobsModal(false);
+
   if (selectedUser) {
     const textStyle = selectedUser.active
       ? {}
       : { color: 'red', filter: 'blur(2px)', textDecoration: 'line-through' };
 
     return (
-      <Box m="40px 0" display="flex" flexDirection="column" alignItems="center">
-        <Box sx={{ width: '50%', padding: '20px', backgroundColor: colors.primary[400], textAlign: 'center' }}>
-          <ArrowBackIcon onClick={handleBackClick} sx={{ cursor: 'pointer', fontSize: '2rem', mb: 2 }} />
-          <Typography variant="h4" sx={{ color: '#4CCEAC', margin: '8px', ...textStyle }} gutterBottom>
-            <Avatar alt={selectedUser.name} src={selectedUser.picUrl} sx={{ width: '100%', height: 'auto', maxWidth: '150px', border: `2px solid ${colors.grey[100]}` }} />
-          </Typography>
-          <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-            ID: {selectedUser.Users_PK}
-          </Typography>
-          <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-            Name: {selectedUser.name}
-          </Typography>
-          <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-            Password: {selectedUser.password}
-          </Typography>
-          <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-            Email: {selectedUser.email}
-          </Typography>
-          <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-            Role: {selectedUser.role}
-          </Typography>
-          <Button variant="contained" color={selectedUser.active ? 'success' : 'error'} onClick={() => handleActiveToggle(selectedUser.Users_PK)}>
-            {selectedUser.active ? 'Deactivate' : 'Activate'}
-          </Button>
+      // <Box m="40px 0" display="flex" flexDirection="column" alignItems="center">
+      //   <Box sx={{ width: '50%', padding: '20px', backgroundColor: colors.primary[400], textAlign: 'center' }}>
+      //     <ArrowBackIcon onClick={handleBackClick} sx={{ cursor: 'pointer', fontSize: '2rem', mb: 2 }} />
+      //     <Typography variant="h4" sx={{ color: '#4CCEAC', margin: '8px', ...textStyle }} gutterBottom>
+      //       <Avatar alt={selectedUser.name} src={selectedUser.picUrl} sx={{ width: '100%', height: 'auto', maxWidth: '150px', border: `2px solid ${colors.grey[100]}` }} />
+      //     </Typography>
+      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
+      //       ID: {selectedUser.Users_PK}
+      //     </Typography>
+      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
+      //       Name: {selectedUser.name}
+      //     </Typography>
+      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
+      //       Password: {selectedUser.password}
+      //     </Typography>
+      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
+      //       Email: {selectedUser.email}
+      //     </Typography>
+      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
+      //       Role: {selectedUser.role}
+      //     </Typography>
+      //     <Button variant="contained" color={selectedUser.active ? 'success' : 'error'} onClick={() => handleActiveToggle(selectedUser.Users_PK)}>
+      //       {selectedUser.active ? 'Deactivate' : 'Activate'}
+      //     </Button>
+      //   </Box>
+      // </Box>
+      <Box m="40px 0" display="flex" flexDirection="column" alignItems="center" >
+
+        <Box
+          display="flex"
+          flexDirection={{ xs: 'column', sm: 'row' }}
+          gap="20px"
+          sx={{ width: "75%", height: "250px" }}
+        >
+          {/* Left side: Profile Image */}
+          <Box
+            flexBasis={{ xs: '100%', sm: '30%' }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor={colors.primary[400]}
+            padding="20px"
+            borderRadius="8px"
+            boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
+          >
+            <Avatar alt={selectedUser.name} src={selectedUser.picUrl} sx={{ width: '180px', height: '180px', border: `2px solid ${colors.grey[100]}` }} />
+          </Box>
+          {/* Right side: User Data */}
+          <Box
+            flexBasis={{ xs: '100%', sm: '70%' }}
+            backgroundColor={colors.primary[400]}
+            padding="20px"
+            borderRadius="8px"
+            boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
+          >
+            <Typography variant="h4" sx={{ color: '#4CCEAC', marginTop: '12px' }} gutterBottom>
+              {selectedUser.name}
+            </Typography>
+            <Typography variant="subtitle1" color={colors.grey[100]} gutterBottom>
+              {selectedUser.role}
+            </Typography>
+            <Typography variant="subtitle1" color={colors.grey[100]} gutterBottom>
+              Email{selectedUser.email}
+            </Typography>
+
+            {/* Rating component with yellow icon */}
+            <Box display="flex" alignItems="center" marginBottom="10px">
+              <Box>
+                <StarIcon sx={{ color: '#FFD700', marginRight: '2px' }} />
+                <StarIcon sx={{ color: '#FFD700', marginRight: '2px' }} />
+                <StarIcon sx={{ color: '#FFD700', marginRight: '2px' }} />
+                <StarIcon sx={{ color: '#FFD700', marginRight: '2px' }} />
+                <StarIcon sx={{ color: '#FFD700', marginRight: '2px' }} />
+              </Box>
+              <Typography variant="body2" color={colors.grey[100]}>
+                4.7 out of 5
+              </Typography>
+            </Box>
+            <Typography variant="body2" color={colors.grey[100]} gutterBottom>
+              Global rating
+            </Typography>
+            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={onBack}>
+              Back to List
+            </Button>
+          </Box>
         </Box>
+        {/* StatBoxes */}
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(4, 1fr)"
+          gap="10px"
+          mt="30px"
+          sx={{ width: "75%" }}
+        >
+          <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" padding="30px 5px" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenJobsModal}>
+            <StatBox
+              subtitle="Total Jobs"
+              title="40"
+              icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
+            />
+          </Box>
+          <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" 
+          // onClick={handlepodcast}
+          onClick={handleOpenPodcastModal}
+          >
+            <StatBox
+              subtitle="Total Podcast"
+              title="25"
+              icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
+            />
+          </Box>
+          <Box
+            backgroundColor={colors.primary[400]}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
+            // onClick={handledailyviewer}
+            // onClick={handlevideo}
+            onClick={handleOpenVideoModal}
+          >
+            <StatBox
+              subtitle="Total Video"
+              title="22"
+              icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
+            />
+          </Box>
+          <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenEventsModal}>
+            <StatBox
+              subtitle="Total Events"
+              title="19"
+              icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
+            />
+          </Box>
+        </Box>
+        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} userId={selectedUser.Users_PK} />
+        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} userId={selectedUser.Users_PK} />
+        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} userId={selectedUser.Users_PK} />
+        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} userId={selectedUser.Users_PK} />
       </Box>
     );
   }
 
   return (
-    <Box m="20px">
+    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
       <Box>
         <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
           <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">
@@ -417,31 +561,31 @@ const Team = () => {
           </Box>
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={DailyEnterpreneurHandle}>
+          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={DailyUserHandle}>
             <StatBox
-              subtitle="Daily Enterpreneur"
+              subtitle="Daily User"
               title="40"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={WeeklyEnterpreneurHandle}>
+          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={WeeklyUserHandle}>
             <StatBox
               title="90"
-              subtitle="Weekly Enterpreneur"
+              subtitle="Weekly User"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={MonthlyEnterpreneurHandle}>
+          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={MonthlyUserHandle}>
             <StatBox
               title="60"
-              subtitle="Monthly Enterpreneur"
+              subtitle="Monthly User"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={TotalEnterpreneurHandle}>
+          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center">
             <StatBox
               title={`${count}`}
-              subtitle="Total Enterpreneur"
+              subtitle="Total User"
               icon={<TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>

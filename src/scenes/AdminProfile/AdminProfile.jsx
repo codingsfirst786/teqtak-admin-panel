@@ -3,21 +3,19 @@ import { useTheme, Button, Card, CardContent, CardHeader, Container, Grid, Typog
 import { tokens } from "../../theme";
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
-// import Paper from '@mui/material/Paper';
 
-// Styled components
 const StyledCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   boxShadow: theme.shadows[5],
 }));
 
-const Bar = () => {
+const AdminProfile = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
     <>
       {/* Page content */}
-      <Container sx={{ mt: 7 }} maxWidth="lg">
+      <Container sx={{ padding: 7, height:"87vh",overflowY:"auto"}}>
         <Grid container spacing={3}>
           {/* Profile Image */}
           <Grid item xs={12} md={4} >
@@ -165,4 +163,4 @@ const Bar = () => {
   );
 };
 
-export default Bar;
+export default AdminProfile;

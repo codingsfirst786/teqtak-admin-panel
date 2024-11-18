@@ -1,99 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Table, TableBody, TableCell, Typography, TableContainer, TableHead, TableRow, Avatar, Paper, IconButton } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { tokens } from '../../theme';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
-import MonthlyViewerUser from '../UserProfile/ViewerUser/MonthlyViewerUser';
-
-const users = [
-  {
-    name: "Jessica Jones",
-    role: "Solution Manager - Creative Tim Officer",
-    location: "Bucharest, Romania",
-    education: "University of Computer Science",
-    description: "Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.",
-    image: "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="
-  },
-  {
-    name: "John Doe",
-    role: "Marketing Manager - ABC Company",
-    location: "New York, USA",
-    education: "University of Marketing",
-    description: "John is a seasoned marketing manager with over a decade of experience in the field.",
-    image: "https://media.istockphoto.com/id/1156411992/photo/portrait-of-a-business-man.jpg?s=612x612&w=0&k=20&c=gnv9XtMjWhCujhmZplZY-FAaOSmlNjzoMV6lYJ-eDjo="
-  },
-  {
-    name: "Jessica Jones",
-    role: "Solution Manager - Creative Tim Officer",
-    location: "Bucharest, Romania",
-    education: "University of Computer Science",
-    description: "Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.",
-    image: "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="
-  },
-  {
-    name: "John Doe",
-    role: "Marketing Manager - ABC Company",
-    location: "New York, USA",
-    education: "University of Marketing",
-    description: "John is a seasoned marketing manager with over a decade of experience in the field.",
-    image: "https://media.istockphoto.com/id/1156411992/photo/portrait-of-a-business-man.jpg?s=612x612&w=0&k=20&c=gnv9XtMjWhCujhmZplZY-FAaOSmlNjzoMV6lYJ-eDjo="
-  },
-  {
-    name: "Jessica Jones",
-    role: "Solution Manager - Creative Tim Officer",
-    location: "Bucharest, Romania",
-    education: "University of Computer Science",
-    description: "Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.",
-    image: "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="
-  },
-  {
-    name: "John Doe",
-    role: "Marketing Manager - ABC Company",
-    location: "New York, USA",
-    education: "University of Marketing",
-    description: "John is a seasoned marketing manager with over a decade of experience in the field.",
-    image: "https://media.istockphoto.com/id/1156411992/photo/portrait-of-a-business-man.jpg?s=612x612&w=0&k=20&c=gnv9XtMjWhCujhmZplZY-FAaOSmlNjzoMV6lYJ-eDjo="
-  },
-  {
-    name: "Jessica Jones",
-    role: "Solution Manager - Creative Tim Officer",
-    location: "Bucharest, Romania",
-    education: "University of Computer Science",
-    description: "Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.",
-    image: "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="
-  },
-  {
-    name: "John Doe",
-    role: "Marketing Manager - ABC Company",
-    location: "New York, USA",
-    education: "University of Marketing",
-    description: "John is a seasoned marketing manager with over a decade of experience in the field.",
-    image: "https://media.istockphoto.com/id/1156411992/photo/portrait-of-a-business-man.jpg?s=612x612&w=0&k=20&c=gnv9XtMjWhCujhmZplZY-FAaOSmlNjzoMV6lYJ-eDjo="
-  },
-  {
-    name: "Jessica Jones",
-    role: "Solution Manager - Creative Tim Officer",
-    location: "Bucharest, Romania",
-    education: "University of Computer Science",
-    description: "Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.",
-    image: "https://media.istockphoto.com/id/1682296067/photo/happy-studio-portrait-or-professional-man-real-estate-agent-or-asian-businessman-smile-for.webp?b=1&s=170667a&w=0&k=20&c=V-RXoAk73ljzQZd0w_JcCFG-jlYs6sjpcrIZQ1TersQ="
-  },
-  {
-    name: "John Doe",
-    role: "Marketing Manager - ABC Company",
-    location: "New York, USA",
-    education: "University of Marketing",
-    description: "John is a seasoned marketing manager with over a decade of experience in the field.",
-    image: "https://media.istockphoto.com/id/1156411992/photo/portrait-of-a-business-man.jpg?s=612x612&w=0&k=20&c=gnv9XtMjWhCujhmZplZY-FAaOSmlNjzoMV6lYJ-eDjo="
-  },
-];
+import DailyEnterpreneurUser from '../UserProfile/EnterpreneurUser/DailyEnterpreneurUser';
+import axios from 'axios';
 
 const MonthlyViewer = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [ dailyUser, setDailyUser] = useState([])
   const navigate = useNavigate();
+
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+  useEffect(()=>{
+    const fetchDailyUser = async () =>{
+      try{
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/info/viewers
+          `);
+          const result = response.data.monthUsers;
+          setDailyUser(result)
+      }
+      catch(err){
+        console.log(err)
+      }
+    }
+    fetchDailyUser();
+  },[])
 
   const handleProfileClick = (user) => {
     setSelectedUser(user);
@@ -103,19 +38,19 @@ const MonthlyViewer = () => {
     setSelectedUser(null); // Reset the selected user to show the table again
   };
 
-  const HandleViewer = () => {
+  const HandleUser = () => {
     navigate('/viewers');
   };
 
   if (selectedUser) {
-    return <MonthlyViewerUser user={selectedUser} onBack={handleBackClick} />;
+    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
   }
 
   return (
-    <Box m="20px">
+    <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Box component={Paper} backgroundColor={colors.primary[400]}>
         <Box display="flex" alignItems="center" mb={2}>
-          <IconButton onClick={HandleViewer}>
+          <IconButton onClick={HandleUser}>
             <ArrowBackIcon />
           </IconButton>
         </Box>
@@ -124,23 +59,22 @@ const MonthlyViewer = () => {
             <TableRow>
               <TableCell color={colors.grey[100]}>Profile</TableCell>
               <TableCell align="right" color={colors.grey[100]}>Name</TableCell>
+              <TableCell align="right" color={colors.grey[100]}>Email</TableCell>
               <TableCell align="right" color={colors.grey[100]}>Role</TableCell>
-              <TableCell align="right" color={colors.grey[100]}>Location</TableCell>
-              <TableCell align="right" color={colors.grey[100]}>Education</TableCell>
-              <TableCell align="right" color={colors.grey[100]}>Description</TableCell>
+              <TableCell align="right" color={colors.grey[100]}>SignIn by</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user, index) => (
+            {dailyUser.map((user, index) => (
               <TableRow key={index} onClick={() => handleProfileClick(user)} style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
-                  <Avatar alt={user.name} src={user.image} sx={{ width: 56, height: 56 }} />
+                  <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />
+                  {/* <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} /> */}
                 </TableCell>
                 <TableCell align="right" color={colors.grey[100]}>{user.name}</TableCell>
+                <TableCell align="right" color={colors.grey[100]}>{user.email}</TableCell>
                 <TableCell align="right" color={colors.grey[100]}>{user.role.slice(0, 15)}{user.role.length > 15 ? '...' : ''}</TableCell>
-                <TableCell align="right" color={colors.grey[100]}>{user.location}</TableCell>
-                <TableCell align="right" color={colors.grey[100]}>{user.education}</TableCell>
-                <TableCell align="right" color={colors.grey[100]}>{user.description.slice(0, 40)}{user.description.length > 40 ? '...' : ''}</TableCell>
+                <TableCell align="right" color={colors.grey[100]}>{user.signedInBy}</TableCell>
               </TableRow>
             ))}
           </TableBody>

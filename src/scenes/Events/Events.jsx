@@ -3,12 +3,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import { Card, CardMedia, CardContent, Typography, Button, Grid } from '@mui/material';
-import {Box, useTheme} from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
 import { styled } from '@mui/material/styles';
-import TrafficIcon from "@mui/icons-material/Traffic";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import StatBox from "../../components/StatBox";
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -17,15 +15,14 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
 
 const Events = () => {
-  const [currentEvents, setCurrentEvents] = useState([]);  
+  const [currentEvents, setCurrentEvents] = useState([]);
   const [count, setCount] = useState(0)
   // ////////////////////////////////////////////// //
   const [events, setEvents] = useState([])
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/events`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/events`)
         const result = await response.data;
         console.log("Fetched data:", result);
         console.log("count is");
@@ -117,55 +114,6 @@ const Events = () => {
     // Add more card objects here
   ];
 
-  // const newCardData = [
-  //   {
-  //     id: 1,
-  //     title: "Business",
-  //     imgSrc: "https://images.unsplash.com/photo-1522582324369-2dfc36bd9275?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDV8fHxlbnwwfHx8fHw%3D",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Networking",
-  //     imgSrc: "https://plus.unsplash.com/premium_photo-1670213989449-29b83feebe8a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Finance",
-  //     imgSrc: "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  //   },
-  //   {
-  //     id: 1,
-  //     title: "Business",
-  //     imgSrc: "https://images.unsplash.com/photo-1522582324369-2dfc36bd9275?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDV8fHxlbnwwfHx8fHw%3D",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Networking",
-  //     imgSrc: "https://plus.unsplash.com/premium_photo-1670213989449-29b83feebe8a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmluYW5jZXxlbnwwfHwwfHx8MA%3D%3D",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Finance",
-  //     imgSrc: "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Finance",
-  //     imgSrc: "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Finance",
-  //     imgSrc: "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Finance",
-  //     imgSrc: "https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww",
-  //   },
-  //   // Add more card objects here
-  // ];
-
   const CardComponent = ({ title, imgSrc }) => (
     <Card sx={{ height: '30vh', width: { lg: '12vw', md: '15vw', sm: '20vw', xs: '25vw' }, position: 'relative', cursor: 'pointer', m: 0 }} >
 
@@ -187,7 +135,7 @@ const Events = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (
-    <Box m="20px">
+    <Box  sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
       <Header title="Event" />
 
       <Box
@@ -210,8 +158,6 @@ const Events = () => {
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
-
-
           />
         </Box>
         <Box
@@ -229,8 +175,6 @@ const Events = () => {
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
-
-
           />
         </Box>
         <Box
@@ -259,7 +203,7 @@ const Events = () => {
           justifyContent="center"
         >
           <StatBox
-            title="190"
+            title={count}
             subtitle="Total Events"
             icon={
               <CalendarMonthIcon
@@ -269,24 +213,9 @@ const Events = () => {
           />
         </Box>
       </Box>
-      <div style={{ height: '100%', width: '100%', backgroundColor: colors.primary[400] }}>
-        {/* <div style={{ width: '100%', height: '10%' }}>
-          <EventFilters />
-        </div> */}
-        <div style={{ height: '89%', marginTop: '1%', width: '100%', overflowY: 'scroll' }}>
-          {/* <Typography variant="h3" component="h3" style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: '1.5% 0', width: '95%', marginLeft: 'auto', marginRight: 'auto', color: "#4CCEAC" }}>
-            Suggested Event
-          </Typography> */}
-          <div style={{ height: '100%', width: '95%', marginLeft: 'auto', marginRight: 'auto' }}>
-            {/* <Grid container spacing={4}>
-              {cardData.map((card) => (
-                <Grid item key={card.id}>
-                  <CardComponent title={card.title} imgSrc={card.imgSrc} />
-                </Grid>
+      <div style={{  padding:"10px 0px",marginTop:"10px", backgroundColor: colors.primary[400] }}>
 
-              ))}
-            </Grid> */}
-            <Grid container spacing={1} style={{ marginTop: '1%', flexWrap: 'wrap', justifyContent: 'space-between', gap: '1%', width: '97%', }}>
+            <Grid container spacing={1} style={{padding:"10px", marginTop: '1%', flexWrap: 'wrap', justifyContent: 'space-between', gap: '1%'}}>
               {events.map((event, i) => (
                 <Grid item key={i} style={{ margin: 0, width: '32.4%', height: '45vh', position: 'relative' }}>
                   <CardMedia component="img" image="https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww" alt="Card Img2y" style={{ height: '100%', width: '100%', borderRadius: '8px', cursor: 'pointer' }}
@@ -297,23 +226,12 @@ const Events = () => {
                       <Typography variant="h5" component="small" style={{ fontSize: '1.25rem', color: "#4CCEAC" }}>{event.eventTitle}</Typography>
                       <Typography variant="body2" style={{ fontSize: '0.875rem', color: 'white', padding: '2% 0' }}>{event.eventDuration}</Typography>
                       <Typography variant="body1" style={{ fontSize: '1rem', color: 'white', paddingBottom: '2%' }}>{event.eventDescription}</Typography>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {/* <Button variant="contained" style={{ marginRight: '1%', padding: '1% 5%', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'white', borderRadius: '24px' }} onClick={() => navigate("/ticket")}>
-                          Buy tickets
-                        </Button> */}
-                        {/* <Button variant="contained" style={{ padding: '1% 7%', display: 'flex', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'white', borderRadius: '24px' }}>
-                        </Button> */}
-                      </div>
                     </div>
                   </div>
                 </Grid>
               ))}
             </Grid>
-          </div>
-        </div>
       </div>
-
-
 
     </Box>
   );

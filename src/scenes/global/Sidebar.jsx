@@ -15,12 +15,14 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import PreviewIcon from '@mui/icons-material/Preview';
 import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
 import BlockIcon from '@mui/icons-material/Block';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+
 
 
 
@@ -210,6 +212,16 @@ const Sidebar = () => {
               <Link to="/blockaccounts" />
             </MenuItem>
 
+            <MenuItem
+              active={selected === "Notification"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Notification")}
+              icon={<NotificationsOutlinedIcon />}
+            >
+              <Typography>Notification</Typography>
+              <Link to="/notification" />
+            </MenuItem>
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -225,7 +237,7 @@ const Sidebar = () => {
               icon={<PersonOutlinedIcon />}
             >
               <Typography>Profile</Typography>
-              <Link to="/bar" />
+              <Link to="/admin-profile" />
             </MenuItem>
 
             <MenuItem

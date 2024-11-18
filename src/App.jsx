@@ -6,13 +6,11 @@ import Dashboard from "./scenes/dashboard";
 import BlockAccount from "./components/BlockAccount";
 import Ticket from '../src/scenes/ticket/Ticket'
 import Meeting from './components/Meeting'
-import Team from "./scenes/team";
-import Invoices from "./scenes/podcast";
-// import Contacts from "./scenes/Videos";
+import Podcast from "./scenes/podcast";
 import Videos from './scenes/Videos/index'
-import Bar from "./scenes/bar";
+// import Bar from "./scenes/AdminProfile";
+import AdminProfile from './scenes/AdminProfile/AdminProfile'
 import GetJobs from "./scenes/GetJobs";
-// import Jobs from "./scenes/Jobs/Jobs";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
@@ -22,8 +20,14 @@ import { ColorModeContext, tokens, useMode } from "./theme";
 import Events from "./scenes/Events/Events";
 import InvestorTable from "./components/InvestorTable";
 import UserProfile from "./components/userProfile";
+import Notifications from "./scenes/notification/Notifications";
+import NotificationUser from "./components/NotificationUser";
 
-
+// Users
+import Team from "./scenes/team";
+import DailyUser from './scenes/team/DailyUser'
+import WeeklyUser from './scenes/team/WeeklyUser'
+import MonthlyUser from './scenes/team/MonthlyUser'
 // Investor 
 import Investor from './scenes/Investor/Investor'
 import DialyInvestor from "./scenes/Investor/DialyInvestor";
@@ -125,12 +129,11 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Team />} />
               <Route path="/videos" element={<Videos />} />
-              <Route path="/podcast" element={<Invoices />} />
+              <Route path="/podcast" element={<Podcast />} />
               <Route path="/jobs" element={<GetJobs />} />
               {/* <Route path="/jobs" element={<Jobs />} /> */}
-              <Route path="/bar" element={<Bar />} />
+              <Route path="/admin-profile" element={<AdminProfile />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
@@ -143,10 +146,18 @@ function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/user" element={<InvestorTable />} />
+              <Route path="notification" element={<Notifications />}/>
+              <Route path="notificationUser" element={<NotificationUser />}/>
 
               {/* User Video Job Events Podcast Routing  */}
               {/* <Route path="/uservideo" element={<MonthlyInvestorVideo />} /> */}
               <Route path="/user" element={<UserProfile />} />
+
+              {/* User Routing  */}
+              <Route path="/team" element={<Team />} />
+              <Route path="/dailyuser" element={<DailyUser />} />
+              <Route path="/weeklyuser" element={<WeeklyUser />} />
+              <Route path="/monthlyuser" element={<MonthlyUser />} />
 
               {/* Investor Routing  */}
               <Route path="/investors" element={<Investor />} />

@@ -48,7 +48,7 @@ const Dashboard = () => {
   // const chartData = userData || data;
 
   return (
-    <Box m="20px">
+    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />

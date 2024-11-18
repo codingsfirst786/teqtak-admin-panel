@@ -7,19 +7,22 @@ import { useNavigate } from 'react-router-dom';
 import DailyEnterpreneurUser from '../UserProfile/EnterpreneurUser/DailyEnterpreneurUser';
 import axios from 'axios';
 
-const DialyEnterpreneur = () => {
+const WeeklyUser = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectedUser, setSelectedUser] = useState(null);
   const [ dailyUser, setDailyUser] = useState([])
+  console.log("dailyUser", dailyUser)
   const navigate = useNavigate();
 
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
   useEffect(()=>{
     const fetchDailyUser = async () =>{
       try{
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/info/entrepreneur
+        const response = await axios.get(`${API_BASE_URL}/admin/info/users
           `);
-          const result = response.data.todayUsers;
+          const result = response.data.weekUsers;
+          console.log("Heyyyyyyy", result)
           setDailyUser(result)
       }
       catch(err){
@@ -34,11 +37,11 @@ const DialyEnterpreneur = () => {
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); 
+    setSelectedUser(null); // Reset the selected user to show the table again
   };
 
   const HandleUser = () => {
-    navigate('/enterpreneur');
+    navigate('/team');
   };
 
   if (selectedUser) {
@@ -83,4 +86,5 @@ const DialyEnterpreneur = () => {
   );
 };
 
-export default DialyEnterpreneur;
+export default WeeklyUser;
+

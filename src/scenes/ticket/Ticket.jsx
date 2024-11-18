@@ -23,7 +23,7 @@ const Ticket = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/tickets/all`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/tickets/all`)
         const result = await response.data;
         console.log("Fetched data:", result);
         const updatedData = result.data.map(ticket => ({
@@ -116,7 +116,7 @@ const Ticket = () => {
 
 
   return (
-    <Box m="20px">
+    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
       <Box>
         <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
           <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">
