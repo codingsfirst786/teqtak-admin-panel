@@ -10,62 +10,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 
-// let SearchData = [
-//   {
-//     id: 1,
-//     categ: "Marketing head",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Applied",
-//   },
-//   {
-//     id: 2,
-//     categ: "Marketing head",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Applied",
-//   },
-//   {
-//     id: 3,
-//     categ: "Brand Designer",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Apply Now",
-//   },
-//   {
-//     id: 3,
-//     categ: "Brand Designer",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Apply Now",
-//   },
-//   {
-//     id: 3,
-//     categ: "Brand Designer",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Apply Now",
-//   },
-//   {
-//     id: 3,
-//     categ: "Brand Designer",
-//     ago: "1 week ago",
-//     state: "United states(Hybrid)",
-//     price: "$80k/yr-$100k/yr",
-//     button: "Apply Now",
-//   },
-
-// ];
 
 const GetJobs = () => {
 
   const [count, setCount] = useState(0)
-  // ////////////////////////////////////////////// //
+  
   const [jobs, setJobs] = useState([])
   useEffect(() => {
     const getData = async () => {
@@ -90,8 +39,23 @@ const GetJobs = () => {
     }
     getData();
   }, [])
-  // /////////////////////////////////////////////  //
-  // const navigate = useNavigate();
+ 
+  const toggleActivation = async (jobId, currentStatus) => {
+    try {
+      const updatedStatus = currentStatus === "true" ? "false" : "true";
+      const response = await axios.put(`${process.env.REACT_APP_BACK_URL}/jobs/${jobId}`, {
+        isActivated: updatedStatus,
+      });
+      const updatedJob = response.data;
+
+      // Update the local state to reflect the new status
+      setJobs(jobs.map(job =>
+        job._id === jobId ? { ...job, isActivated: updatedJob.isActivated } : job
+      ));
+    } catch (error) {
+      console.error('Error updating job activation status', error);
+    }
+  };
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -242,35 +206,21 @@ const GetJobs = () => {
                   {job.salaryRange}
                 </Typography>
               </Box>
-              <Box textAlign="center">
-                {/* {job.button === "Apply Now" ? ( */}
-                <Button
+              <Box textAlign="center" mt={2}>
+              <Button
                   variant="contained"
                   fullWidth
                   sx={{
-                    mt: 2,
-                    bgcolor: "#EEEEEE",
-                    color: "black",
+                    bgcolor: job.isActivated === "true" ? "#4CCEAC" : "#EEEEEE",
+                    color: job.isActivated === "true" ? "white" : "black",
                     "&:hover": {
-                      bgcolor: "#6166f331",
-                      color: "#6165F3",
+                      bgcolor: job.isActivated === "true" ? "#3BA68F" : "#CCCCCC",
                     },
                   }}
-                // onClick={() => navigate('/jobdetail')}
+                  onClick={() => toggleActivation(job._id, job.isActivated)}
                 >
-                  {/* {job.button} */}
-                  Applied
+                  {job.isActivated === "true" ? "Deactivate" : "Activate"}
                 </Button>
-                {/* ) : ( */}
-                {/* <Button
-                  variant="contained"
-                  fullWidth
-                  sx={{ mt: 2, bgcolor: "#EEEEEE", cursor: "not-allowed" }}
-                  disabled
-                >
-                  {job.button}
-                </Button> */}
-                {/* )} */}
               </Box>
             </Box>
           ))}

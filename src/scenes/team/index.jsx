@@ -5,7 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { tokens } from "../../theme";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import TrafficIcon from "@mui/icons-material/Traffic";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from "react-router-dom";
 import StatBox from "../../components/StatBox";
 import Header from "../../components/Header";
@@ -52,7 +52,7 @@ const Team = ({onBack, userId}) => {
           active: true
         }));
         setCount(result.count)
-        console.log(updatedData)
+        console.log("this is updated data",updatedData)
         setTeam(updatedData);
       } catch (error) {
         console.error('Fetching data error', error);
@@ -90,8 +90,9 @@ const Team = ({onBack, userId}) => {
       },
       body: JSON.stringify(data)
     })
+   
     const d = await req.json()
-    console.log({ d })
+    console.log("asdsdaadasdas",d)
   }
 
   const handleActiveToggle = (userId) => {
