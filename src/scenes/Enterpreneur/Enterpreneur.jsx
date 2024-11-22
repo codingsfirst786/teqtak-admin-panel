@@ -14,20 +14,23 @@ import UserVideo from "../../components/UserVideo";
 import UserPodcast from "../../components/UserPodcast";
 import UserEvents from "../../components/UserEvents";
 import UserJobs from "../../components/UserJobs";
+import { fetchAllEnterpreneurCount } from "../../Api/Enterpreneurs/AllEnterpreneurCount.api";
 
 const Enterpreneur = ({ onBack }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [entrepreneur, setEntrepreneur] = useState([]); 
-  const [selectedUser, setSelectedUser] = useState(null); 
+  const [entrepreneur, setEntrepreneur] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [dailyEnterpreneurCount, setDailyEnterpreneurCount] = useState(0)
+  const [monthlyEnterpreneurCount, setMonthlyEnterpreneurCount] = useState(0)
+  const [weeklyEnterpreneurCount, setWeeklyEnterpreneurCount] = useState(0)
   const [count, setCount] = useState(0)
   const navigate = useNavigate();
 
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/entrepreneur
-`);
+      const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/entrepreneur`);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -41,7 +44,6 @@ const Enterpreneur = ({ onBack }) => {
         const result = await fetchData();
         console.log("Fetched data:", result);
 
-        // Set fetched data to state with active status as true by default
         const updatedData = result.data.data.map(user => ({
           ...user,
           active: true
@@ -55,10 +57,10 @@ const Enterpreneur = ({ onBack }) => {
     };
     getData();
   }, []);
+
   const handleDelete = async (userId) => {
 
     try {
-      // Sending DELETE request
       const response = await axios.delete(`${process.env.REACT_APP_BACK_URL}/admin/${userId}`);
       if (response.status === 200) {
         console.log("User deleted successfully:", response.data);
@@ -82,13 +84,12 @@ const Enterpreneur = ({ onBack }) => {
   };
 
   const handleViewProfileClick = (user) => {
-    setSelectedUser(user); // Set selected user for profile view
+    setSelectedUser(user); 
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); // Reset to show the table
-  };
-
+    setSelectedUser(null)
+  }
   const handleActiveToggle = (userId) => {
     const updatedEntrepreneurData = entrepreneur.map((user) =>
       user.Users_PK === userId ? { ...user, active: !user.active } : user
@@ -98,6 +99,7 @@ const Enterpreneur = ({ onBack }) => {
       setSelectedUser({ ...selectedUser, active: !selectedUser.active });
     }
   };
+
   const deActivateUser = async (id) => {
     const data = { "isBlocked": "true" }
     console.log('deavtivating ', id)
@@ -111,6 +113,21 @@ const Enterpreneur = ({ onBack }) => {
     const d = await req.json()
     console.log({ d })
   }
+
+  useEffect(() => {
+    const getUserCount = async () => {
+      try {
+        const users = await fetchAllEnterpreneurCount(); 
+        setDailyEnterpreneurCount(users.count.daily);
+        setWeeklyEnterpreneurCount(users.count.weekly)
+        setMonthlyEnterpreneurCount(users.count.monthly)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserCount();
+  }, []);
+
   const columns = [
     { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK, minWidth: 150 },
     {
@@ -146,7 +163,8 @@ const Enterpreneur = ({ onBack }) => {
       width: 200,
       renderCell: (params) => (
         <Box display="flex" gap="10px">
-          <Button variant="contained" color="primary" onClick={() => handleViewProfileClick(params.row)}>
+          <Button variant="contained" color="primary"
+           onClick={() => handleViewProfileClick(params.row)}>
             Profile
           </Button>
           <Button
@@ -174,18 +192,6 @@ const Enterpreneur = ({ onBack }) => {
     },
   ];
 
-  const handlepodcast = () => {
-    navigate('/dailyenterpreneurpodcast')
-  }
-  const handlevideo = () => {
-    navigate('/dailyenterpreneurvideo')
-  }
-  const handlejobs = () => {
-    navigate('/dailyenterpreneurjobs')
-  }
-  const handleevents = () => {
-    navigate('/dailyenterpreneurevents')
-  }
 
   // State to control the video modal visibility
   const [openVedioModal, setOpenVideoModal] = useState(false);
@@ -241,7 +247,7 @@ const Enterpreneur = ({ onBack }) => {
           display="flex"
           flexDirection={{ xs: 'column', sm: 'row' }}
           gap="20px"
-          sx={{ width: "75%", height: "220px" }}
+          sx={{ width: "75%", height: "250px" }}
         >
           {/* Left side: Profile Image */}
           <Box
@@ -290,7 +296,7 @@ const Enterpreneur = ({ onBack }) => {
             <Typography variant="body2" color={colors.grey[100]} gutterBottom>
               Global rating
             </Typography>
-            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={onBack}>
+            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={handleBackClick}>
               Back to List
             </Button>
           </Box>
@@ -362,20 +368,20 @@ const Enterpreneur = ({ onBack }) => {
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={DailyEnterpreneurHandle}>
             <StatBox
               subtitle="Daily Enterpreneur"
-              title="40"
+              title={dailyEnterpreneurCount}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={WeeklyEnterpreneurHandle}>
             <StatBox
-              title="90"
+              title={weeklyEnterpreneurCount}
               subtitle="Weekly Enterpreneur"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={MonthlyEnterpreneurHandle}>
             <StatBox
-              title="60"
+              title={monthlyEnterpreneurCount}
               subtitle="Monthly Enterpreneur"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />

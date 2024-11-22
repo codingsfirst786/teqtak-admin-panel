@@ -31,43 +31,7 @@ const UserJobs = ({ open, handleClose, userId }) => {
       getData();
     }
   }, [userId]);
-  const data = [
-    {
-      id: 1,
-      jobTitle: "Developer",
-      salaryRange: "$3k-$5K",
-      workplaceType: "Remote",
-      applicationDeadline: "1 september"
-    },
-    {
-      id: 2,
-      jobTitle: "Designer",
-      salaryRange: "$3k-$5K",
-      workplaceType: "On-Site",
-      applicationDeadline: "1 september"
-    },
-    {
-      id: 3,
-      jobTitle: "Designer",
-      salaryRange: "$3k-$5K",
-      workplaceType: "On-Site",
-      applicationDeadline: "1 september"
-    },
-    {
-      id: 4,
-      jobTitle: "Designer",
-      salaryRange: "$3k-$5K",
-      workplaceType: "On-Site",
-      applicationDeadline: "1 september"
-    },
-    {
-      id: 5,
-      jobTitle: "Designer",
-      salaryRange: "$3k-$5K",
-      workplaceType: "On-Site",
-      applicationDeadline: "1 september"
-    },
-  ]
+ 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 

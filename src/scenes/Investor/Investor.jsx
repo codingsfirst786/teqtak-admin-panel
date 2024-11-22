@@ -20,9 +20,7 @@ import UserVideo from "../../components/UserVideo";
 import UserPodcast from "../../components/UserPodcast";
 import UserEvents from "../../components/UserEvents";
 import UserJobs from "../../components/UserJobs";
-import { fetchDailyUsers } from "../../Api/Investors/DailyInvestor.Api";
-import { fetchWeeklyUsers } from "../../Api/Investors/WeeklyInvestor.Api";
-import { fetchMonthlyUsers } from "../../Api/Investors/MonthlyInvestor.Api";
+import { fetchAllInvestorsCount } from "../../Api/Investors/allInvestorCount.api";
 
 
 const Investor = ({ onBack }) => {
@@ -50,54 +48,27 @@ const Investor = ({ onBack }) => {
     setSelectedUser(user);
   };
 
-  const handleBackClick = () => {
-    setSelectedUser(null); // Reset to show the table
-  };
-
-
   const [investors, setInvestors] = useState([])
 
   useEffect(() => {
-    const getDailyUsers = async () => {
+    const getUserCount = async () => {
       try {
-        const users = await fetchDailyUsers();  // Call the API function
-        setDailyInvestorCount(users.length);
+        const users = await fetchAllInvestorsCount(); 
+        setDailyInvestorCount(users.count.daily);
+        setWeeklyInvestorCount(users.count.weekly)
+        setMonthlyInvestorCount(users.count.monthly)
       } catch (error) {
         console.log(error);
       }
     };
-    getDailyUsers();
+    getUserCount();
   }, []);
-  useEffect(() => {
-    const getWeeklyUsers = async () => {
-      try {
-        const users = await fetchWeeklyUsers();  // Call the API function
-        setWeeklyInvestorCount(users.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getWeeklyUsers();
-  }, []);
-  useEffect(() => {
-    const getmonthlyUsers = async () => {
-      try {
-        const users = await fetchMonthlyUsers();  // Call the API function
-        setMonthlyInvestorCount(users.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getmonthlyUsers();
-  }, []);
+
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/investers`)
         const result = await response.data;
-        // console.log("Fetched data:", result);
-        // console.log("count is");
-        // console.log(result.data.count)
         const updatedData = result.data.data.map(user => ({
           ...user,
           active: true
@@ -114,7 +85,6 @@ const Investor = ({ onBack }) => {
     getData();
   }, [])
 
-  // Delete User 
   const handleDelete = async (userId) => {
 
     try {
@@ -128,6 +98,7 @@ const Investor = ({ onBack }) => {
       console.error("Error deleting user:", error);
     }
   };
+
   const handleActiveToggle = (userId) => {
     const updatedEntrepreneurData = investors.map((user) =>
       user.Users_PK === userId ? { ...user, active: !user.active } : user
@@ -137,6 +108,7 @@ const Investor = ({ onBack }) => {
       setSelectedUser({ ...selectedUser, active: !selectedUser.active });
     }
   };
+
   const deActivateUser = async (id) => {
     const data = { "isBlocked": "true" }
     console.log('deavtivating ', id)
@@ -150,6 +122,11 @@ const Investor = ({ onBack }) => {
     const d = await req.json()
     console.log({ d })
   }
+  
+  const handleBackClick = () => {
+    setSelectedUser(null)
+  }
+
   const columns = [
     {
       field: "id",
@@ -331,7 +308,7 @@ const Investor = ({ onBack }) => {
             <Typography variant="body2" color={colors.grey[100]} gutterBottom>
               Global rating
             </Typography>
-            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={onBack}>
+            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={handleBackClick}>
               Back to List
             </Button>
           </Box>

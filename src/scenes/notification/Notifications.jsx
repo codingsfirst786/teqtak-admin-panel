@@ -3,7 +3,6 @@ import { Box, Typography, Avatar } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { tokens } from '../../theme';
 import axios from 'axios';
-import userImage from '../../assets/user.jpg'; // Assuming the user image is imported correctly
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -14,11 +13,10 @@ function Notifications() {
   const navigate = useNavigate()
 
   const [notification, setNotification] = useState([])
-console.log("agfdfkdjsjfbkfdnb fkdnbsafkmlvncbbsd vn  disfhb vjnk dhbasdjbbh",process.env.REACT_APP_BACK_URL)
   useEffect(() => {
     const getNotification = async () => {
       try {
-        const response = await axios.get(`https://api.teqtak.com /notifications`);
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/notifications`);
         const result = response.data;
         const userId = result.data
         console.log("Notification Response is ", userId);

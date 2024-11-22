@@ -22,6 +22,7 @@ import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
 import BlockIcon from '@mui/icons-material/Block';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 
 
 
@@ -220,6 +221,16 @@ const Sidebar = () => {
             >
               <Typography>Notification</Typography>
               <Link to="/notification" />
+            </MenuItem>
+
+            <MenuItem
+              active={selected === "Add Question"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Add Question")}
+              icon={<QuizOutlinedIcon />}
+            >
+              <Typography>Add Question</Typography>
+              <Link to="/addQuestion" />
             </MenuItem>
 
             <Typography

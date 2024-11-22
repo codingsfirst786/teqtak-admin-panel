@@ -66,11 +66,12 @@ const UserPodcast = ({ open, handleClose, userId }) => {
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     width: "50%",
-                    boxShadow: 24,
+                    height: '60vh',
                     borderRadius: 2,
-                    p: 4,
-                    maxHeight: "80vh",
                     overflowY: "auto",
+                    boxShadow: 24,
+                    p: 4,
+                    maxHeight: "80vh"
                 }}
             >
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>

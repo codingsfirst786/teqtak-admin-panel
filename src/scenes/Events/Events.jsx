@@ -127,10 +127,6 @@ const Events = () => {
 
   const navigate = useNavigate();
 
-  const StyledCard = styled(Card)(({ theme }) => ({
-    marginBottom: theme.spacing(2),
-    boxShadow: theme.shadows[5],
-  }));
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -218,14 +214,14 @@ const Events = () => {
             <Grid container spacing={1} style={{padding:"10px", marginTop: '1%', flexWrap: 'wrap', justifyContent: 'space-between', gap: '1%'}}>
               {events.map((event, i) => (
                 <Grid item key={i} style={{ margin: 0, width: '32.4%', height: '45vh', position: 'relative' }}>
-                  <CardMedia component="img" image="https://images.unsplash.com/photo-1665686306574-1ace09918530?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJ1c2luZXNzfGVufDB8fDB8fHww" alt="Card Img2y" style={{ height: '100%', width: '100%', borderRadius: '8px', cursor: 'pointer' }}
+                  <CardMedia component="img" image={event.eventCoverUrl} alt="Card Img2y" style={{ height: '100%', width: '100%', borderRadius: '8px', cursor: 'pointer' }}
                   />
-                  <BookmarkBorderIcon style={{ position: 'absolute', right: '2%', top: '4%', color: 'white', fontSize: '2rem' }} />
+                  {/* <BookmarkBorderIcon style={{ position: 'absolute', right: '2%', top: '4%', color: 'white', fontSize: '2rem' }} /> */}
                   <div style={{ position: 'absolute', bottom: '1%', width: '100%' }}>
-                    <div style={{ width: '95%', marginLeft: 'auto', marginRight: 'auto', padding: '1% 3%', backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '8px' }}>
-                      <Typography variant="h5" component="small" style={{ fontSize: '1.25rem', color: "#4CCEAC" }}>{event.eventTitle}</Typography>
-                      <Typography variant="body2" style={{ fontSize: '0.875rem', color: 'white', padding: '2% 0' }}>{event.eventDuration}</Typography>
-                      <Typography variant="body1" style={{ fontSize: '1rem', color: 'white', paddingBottom: '2%' }}>{event.eventDescription}</Typography>
+                    <div style={{ width: '95%', marginLeft:"3px",   padding: '1% 3%', backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '8px' }}>
+                      <Typography variant="h5" component="small" style={{ fontSize: '1.25rem', color: "#4CCEAC" }}>Title: {event.eventTitle}</Typography>
+                      <Typography variant="body2" style={{ fontSize: '0.875rem', color: 'white', padding: '2% 0' }}>Location: {event.eventLocation}</Typography>
+                      <Typography variant="body1" style={{ fontSize: '1rem', color: 'white', paddingBottom: '2%' }}>Date: {event.eventDate}</Typography>
                     </div>
                   </div>
                 </Grid>

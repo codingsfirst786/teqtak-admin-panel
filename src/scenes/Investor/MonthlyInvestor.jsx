@@ -6,7 +6,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import DailyEnterpreneurUser from '../UserProfile/EnterpreneurUser/DailyEnterpreneurUser';
 import axios from 'axios';
-import { fetchMonthlyUsers } from '../../Api/Investors/MonthlyInvestor.Api';
+import { fetchAllInvestorsCount } from '../../Api/Investors/allInvestorCount.api';
+// import { fetchMonthlyUsers } from '../../Api/Investors/MonthlyInvestor.Api';
 
 const MonthlyInvestor = () => {
   const theme = useTheme();
@@ -17,15 +18,15 @@ const MonthlyInvestor = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getMonthlyUsers = async () => {
+    const getDailyUsers = async () => {
       try {
-        const users = await fetchMonthlyUsers();  // Call the API function
-        setDailyUser(users);
+        const users = await fetchAllInvestorsCount(); 
+        setDailyUser(users.monthUsers);
       } catch (error) {
         console.log(error);
       }
     };
-    getMonthlyUsers();
+    getDailyUsers();
   }, []);
 
   const handleProfileClick = (user) => {

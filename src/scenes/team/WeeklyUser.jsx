@@ -37,7 +37,7 @@ const WeeklyUser = () => {
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); // Reset the selected user to show the table again
+    setSelectedUser(null); 
   };
 
   const HandleUser = () => {

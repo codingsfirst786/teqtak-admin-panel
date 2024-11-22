@@ -6,7 +6,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import DailyEnterpreneurUser from '../UserProfile/EnterpreneurUser/DailyEnterpreneurUser';
 import axios from 'axios';
-import { fetchWeeklyUsers } from '../../Api/Investors/WeeklyInvestor.Api';
+import { fetchAllInvestorsCount } from '../../Api/Investors/allInvestorCount.api';
+// import { fetchWeeklyUsers } from '../../Api/Investors/WeeklyInvestor.Api';
 
 const WeeklyInvestor = () => {
   const theme = useTheme();
@@ -19,8 +20,8 @@ const WeeklyInvestor = () => {
   useEffect(() => {
     const getDailyUsers = async () => {
       try {
-        const users = await fetchWeeklyUsers();  // Call the API function
-        setDailyUser(users);
+        const users = await fetchAllInvestorsCount(); 
+        setDailyUser(users.weekUsers);
       } catch (error) {
         console.log(error);
       }
@@ -33,7 +34,7 @@ const WeeklyInvestor = () => {
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); // Reset the selected user to show the table again
+    setSelectedUser(null); 
   };
 
   const HandleUser = () => {

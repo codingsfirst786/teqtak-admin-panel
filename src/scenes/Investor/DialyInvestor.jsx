@@ -5,7 +5,7 @@ import { tokens } from '../../theme';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import DailyEnterpreneurUser from '../UserProfile/EnterpreneurUser/DailyEnterpreneurUser';
-import { fetchDailyUsers } from '../../Api/Investors/DailyInvestor.Api'; // Import the API function
+import { fetchAllInvestorsCount } from '../../Api/Investors/allInvestorCount.api'; // Import the API function
 
 const DialyInvestor = () => {
   const theme = useTheme();
@@ -18,8 +18,8 @@ const DialyInvestor = () => {
   useEffect(() => {
     const getDailyUsers = async () => {
       try {
-        const users = await fetchDailyUsers();  // Call the API function
-        setDailyUser(users);
+        const users = await fetchAllInvestorsCount(); 
+        setDailyUser(users.todayUsers);
       } catch (error) {
         console.log(error);
       }

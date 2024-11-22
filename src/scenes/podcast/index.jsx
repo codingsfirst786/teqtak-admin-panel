@@ -56,7 +56,7 @@ const Podcast = () => {
   const handleDeletePodact = async (podid) => {
     try {
       // Make a DELETE request to the API to delete the video by ID
-      await axios.delete(`${process.env.REACT_APP_BACK_URL}/podcasts//${podid}`);
+      await axios.delete(`${process.env.REACT_APP_BACK_URL}/podcasts/${podid}`);
       
       // Remove the deleted video from the state
       setPodcast((prevpodcast) => prevpodcast.filter((podcast) => podcast._id !== podid));
@@ -181,11 +181,11 @@ const Podcast = () => {
               />
               <Box position="absolute" bottom={0} left={0} width="100%" bgcolor="rgba(0,0,0,0.6)" color="white" p={2}>
                 <Typography variant="h4" style={{ color: "#4CCEAC" }}>{elm.episodeTitle}</Typography>
-                <Typography variant="h6">Speaker : {elm.speakers}</Typography>
+                <Typography variant="h6">Type : {elm.podcastType}</Typography>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" display="flex" alignItems="center" gap={1}>
+                  {/* <Typography variant="body2" display="flex" alignItems="center" gap={1}>
                     {elm.user.name}
-                  </Typography>
+                  </Typography> */}
                   <Button variant="contained" color="primary" onClick={() => handleDetailClick(elm)}>
                     Detail
                   </Button>
@@ -238,9 +238,9 @@ const Podcast = () => {
                   <Typography variant="h5" sx={{ my: "7px" }}>
                     Speaker: {selectedImage.speakers}
                   </Typography>
-                  <Typography variant="h6" style={{ color: "#4CCEAC" }} sx={{ mt: "20px" }}>
+                  {/* <Typography variant="h6" style={{ color: "#4CCEAC" }} sx={{ mt: "20px" }}>
                     Publisher: {selectedImage.user.name}
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Box>
             )}

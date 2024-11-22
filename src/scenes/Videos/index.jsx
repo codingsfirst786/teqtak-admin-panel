@@ -18,11 +18,11 @@ import BackspaceIcon from '@mui/icons-material/Backspace';
 const Videos = () => {
   const [count, setCount] = useState(0)
   const [videos, setVideos] = useState([])
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/upload';
+  // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/upload';
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/videos/all`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/upload/videos/all`)
         const result = await response.data;
         console.log("Fetched data:", result);
         const updatedData = result.data.map(user => ({
@@ -183,7 +183,7 @@ const Videos = () => {
                   height={"200px"}
                   style={{ objectFit: "cover" }}
                   controls
-                ></video>
+                ></video>                                                                                                  
                 <Typography px={1} borderRadius={1} position={'relative'} zIndex={'1'} top={-200} left={134}>
                   <BackspaceIcon 
                   onClick={() => handleDeleteVideo(video._id)}

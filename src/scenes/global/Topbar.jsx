@@ -82,12 +82,9 @@ const Topbar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
-        <Link to="/bar">
+        <Link to="/admin-profile">
           <IconButton>
             <PersonOutlinedIcon />
-          </IconButton>
-          <IconButton>
-            <NotificationsOutlinedIcon />
           </IconButton>
         </Link>
       </Box>

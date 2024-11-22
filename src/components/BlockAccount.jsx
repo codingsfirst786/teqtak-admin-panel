@@ -15,7 +15,7 @@ function BlockAccount() {
 
   }, [render])
   const blockedUser = async () => {
-    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/blocked`, {
+    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/block`, {
       method: 'GET',
       credentials: 'include'
     })

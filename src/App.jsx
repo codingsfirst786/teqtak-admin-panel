@@ -110,6 +110,7 @@ import DailyViewerEvents from "./scenes/AllEvents/ViewerEvents/DailyViewerEvents
 import MonthlyViewerEvents from "./scenes/AllEvents/ViewerEvents/MonthlyViewerEvents";
 import TotalViewerEvents from "./scenes/AllEvents/ViewerEvents/TotalViewerEvents";
 import WeeklyViewerEvents from "./scenes/AllEvents/ViewerEvents/WeeklyViewerEvents";
+import AddQuestion from "./scenes/question/AddQuestion";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -146,8 +147,8 @@ function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/user" element={<InvestorTable />} />
-              <Route path="notification" element={<Notifications />}/>
-              <Route path="notificationUser" element={<NotificationUser />}/>
+              <Route path="notification" element={<Notifications />} />
+              <Route path="notificationUser" element={<NotificationUser />} />
 
               {/* User Video Job Events Podcast Routing  */}
               {/* <Route path="/uservideo" element={<MonthlyInvestorVideo />} /> */}
@@ -240,7 +241,8 @@ function App() {
               <Route path="/monthlyviewerevents" element={<MonthlyViewerEvents />} />
               <Route path="/totalviewerevents" element={<TotalViewerEvents />} />
               <Route path="/weeklyviewerevents" element={<WeeklyViewerEvents />} />
-
+              {/* Question  */}
+              <Route path="/addQuestion" element={<AddQuestion />} />
 
 
               {/* Investor Enterpreneur Viewer User  */}

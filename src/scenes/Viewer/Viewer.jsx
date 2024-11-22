@@ -13,6 +13,7 @@ import UserJobs from "../../components/UserJobs";
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { fetchAllViewersCount } from "../../Api/Viewers/AllviewerCount.api";
 
 const Viewer = ({ onBack }) => {
   const theme = useTheme();
@@ -44,18 +45,6 @@ const Viewer = ({ onBack }) => {
       setSelectedUser({ ...selectedUser, active: !selectedUser.active });
     }
   };
-  const handlepodcast = () => {
-    navigate('/dailyenterpreneurpodcast')
-  }
-  const handlevideo = () => {
-    navigate('/dailyenterpreneurvideo')
-  }
-  const handlejobs = () => {
-    navigate('/dailyenterpreneurjobs')
-  }
-  const handleevents = () => {
-    navigate('/dailyenterpreneurevents')
-  }
 
   // State to control the video modal visibility
   const [openVedioModal, setOpenVideoModal] = useState(false);
@@ -76,7 +65,10 @@ const Viewer = ({ onBack }) => {
 
   // ////////////////////////////////////////////// //
   const [viewer, setViewer] = useState([])
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+  const [dailyViewerCount, setDailyViewerCount] = useState(0)
+  const [monthlyViewerCount, setMonthlyViewerCount] = useState(0)
+  const [weeklyViewerCount, setWeeklyViewerCount] = useState(0)
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -100,6 +92,7 @@ const Viewer = ({ onBack }) => {
     }
     getData();
   }, [])
+
   const handleDelete = async (userId) => {  
 
     try {
@@ -127,6 +120,25 @@ const Viewer = ({ onBack }) => {
     const d = await req.json()
     console.log({ d })
   }
+
+  const handleBackClick = () => {
+    setSelectedUser(null)
+  }
+
+  useEffect(() => {
+    const getUserCount = async () => {
+      try {
+        const users = await fetchAllViewersCount(); 
+        setDailyViewerCount(users.count.daily);
+        setWeeklyViewerCount(users.count.weekly)
+        setMonthlyViewerCount(users.count.monthly)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserCount();
+  }, []);
+
   // /////////////////////////////////////////////  //
   const columns = [
     { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK,  minWidth: 150 },
@@ -196,7 +208,6 @@ const Viewer = ({ onBack }) => {
       ? {}
       : { color: 'red', filter: 'blur(2px)', textDecoration: 'line-through' };
 
-    // Render the selected user's profile
     return (
       <Box m="40px 0" display="flex" flexDirection="column" alignItems="center" >
         <Box
@@ -251,7 +262,7 @@ const Viewer = ({ onBack }) => {
             <Typography variant="body2" color={colors.grey[100]} gutterBottom>
               Global rating
             </Typography>
-            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={onBack}>
+            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={handleBackClick}>
               Back to List
             </Button>
           </Box>
@@ -326,21 +337,21 @@ const Viewer = ({ onBack }) => {
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={DailyViewerHandle}>
             <StatBox
+              title={dailyViewerCount}
               subtitle="Daily Viewer"
-              title="40"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={WeeklyViewerHandle}>
             <StatBox
-              title="90"
+              title={weeklyViewerCount}
               subtitle="Weekly Viewer"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" onClick={MonthlyViewerHandle}>
             <StatBox
-              title="60"
+              title={monthlyViewerCount}
               subtitle="Monthly Viewer"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />

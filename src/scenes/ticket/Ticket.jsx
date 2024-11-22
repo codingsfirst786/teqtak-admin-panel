@@ -23,7 +23,7 @@ const Ticket = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/tickets/all`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/tickets/`)
         const result = await response.data;
         console.log("Fetched data:", result);
         const updatedData = result.data.map(ticket => ({
