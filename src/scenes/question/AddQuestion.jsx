@@ -15,7 +15,7 @@ const AddQuestion = () => {
     const colors = tokens(theme.palette.mode);
     const [userRole, setUserRole] = useState("");
     const [question, setQuestion] = useState("");
-    const [options, setOptions] = useState(["", "", "", ""]);
+    const [options, setOptions] = useState(["", "", "", "",""]);
 
     const handleRoleChange = (role) => {
         setUserRole(role);
@@ -27,32 +27,36 @@ const AddQuestion = () => {
         setOptions(newOptions);
     };
 
+   
     const handleSubmit = async () => {
         const data = {
             userRole,
             question,
             options,
         };
-        if (userRole === "" && question === "" && options === "") {
-            alert('PLease fill all field')
+        if (userRole === "" || question === "" || options.some(option => option === "")) {
+            alert('Please fill all fields');
             return;
-        }
-        else {
-            const response = await axios.post(`${process.env.REACT_APP_BACK_URL}/qna/ques`, data,
-                {
+        } else {
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_BACK_URL}/qna/ques`, data, {
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            )
-            console.log(response)
-            alert(`Data Submitted: ${JSON.stringify(data, null, 2)}`);
-            setUserRole('');
-            setQuestion('');
-            setOptions('')
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log(response);
+                alert(`Data Submitted: ${JSON.stringify(data, null, 2)}`);
+                // Reset states correctly
+                setUserRole('');
+                setQuestion('');
+                setOptions(["", "", "", "",""]); // Reset to initial array
+            } catch (error) {
+                console.error("Error submitting data:", error);
+                alert('Failed to submit data');
+            }
         }
     };
-
+    
     return (
         <Box sx={{ maxWidth: "500px", margin: "auto", p: 2 }}>
             <Typography variant="h3" gutterBottom color={colors.greenAccent[600]}>
@@ -61,9 +65,9 @@ const AddQuestion = () => {
 
             {/* Role Selection Buttons */}
             <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-                {["Viewer", "Entrepreneur", "Investor"].map((role) => (
+                {[ "Entrepreneur", "Investor"].map((role) => (
                     <Button
-                        sx={{ backgroundColor: colors.greenAccent[400], mx: 1 }}
+                        sx={{ backgroundColor: colors.greenAccent[500], mx: 1 }}
                         key={role}
                         variant={userRole === role.toLowerCase() ? "contained" : "outlined"}
                         onClick={() => handleRoleChange(role.toLowerCase())}
