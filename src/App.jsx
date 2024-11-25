@@ -111,6 +111,7 @@ import MonthlyViewerEvents from "./scenes/AllEvents/ViewerEvents/MonthlyViewerEv
 import TotalViewerEvents from "./scenes/AllEvents/ViewerEvents/TotalViewerEvents";
 import WeeklyViewerEvents from "./scenes/AllEvents/ViewerEvents/WeeklyViewerEvents";
 import AddQuestion from "./scenes/question/AddQuestion";
+import Signup from "./scenes/Singup/Signup";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -122,18 +123,20 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          {/* <Box className="render-side-bar" sx={{height:"100vh", width: '285px',position:"fixed",backgroundColor: colors.primary[400], overflowY:"scroll"}}> */}
           <Sidebar isSidebar={isSidebar} />
-          {/* </Box> */}
-          {/* <div style={{width:"26%"}}></div> */}
-          <main className="content" >
+          <main className="content">
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
+             
+              <Route path="/signup" element={<Signup />} />
+
+              {/* Default route for the dashboard */}
               <Route path="/" element={<Dashboard />} />
+
+              {/* Other Routes */}
               <Route path="/videos" element={<Videos />} />
               <Route path="/podcast" element={<Podcast />} />
               <Route path="/jobs" element={<GetJobs />} />
-              {/* <Route path="/jobs" element={<Jobs />} /> */}
               <Route path="/admin-profile" element={<AdminProfile />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
@@ -141,26 +144,20 @@ function App() {
               <Route path="/blockaccounts" element={<BlockAccount />} />
               <Route path="/meetings" element={<Meeting />} />
               <Route path="/tickets" element={<Ticket />} />
-              {/* <Route path="/interpreneur" element={<InvestorTable />} /> */}
-              {/* <Route path="/viewer" element={<InvestorTable />} /> */}
               <Route path="/traffic" element={<InvestorTable />} />
               <Route path="/events" element={<Events />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/user" element={<InvestorTable />} />
-              <Route path="notification" element={<Notifications />} />
-              <Route path="notificationUser" element={<NotificationUser />} />
+              <Route path="/notification" element={<Notifications />} />
+              <Route path="/notificationUser" element={<NotificationUser />} />
 
-              {/* User Video Job Events Podcast Routing  */}
-              {/* <Route path="/uservideo" element={<MonthlyInvestorVideo />} /> */}
-              <Route path="/user" element={<UserProfile />} />
-
-              {/* User Routing  */}
+              {/* User Routing */}
               <Route path="/team" element={<Team />} />
               <Route path="/dailyuser" element={<DailyUser />} />
               <Route path="/weeklyuser" element={<WeeklyUser />} />
               <Route path="/monthlyuser" element={<MonthlyUser />} />
 
-              {/* Investor Routing  */}
+              {/* Investor Routing */}
               <Route path="/investors" element={<Investor />} />
               <Route path="/dailyinvestor" element={<DialyInvestor />} />
               <Route path="/weeklyinvestor" element={<WeeklyInvestor />} />
@@ -187,8 +184,7 @@ function App() {
               <Route path="/totalinvestorevents" element={<TotalInvestorEvents />} />
               <Route path="/weeklyinvestorevents" element={<WeeklyInvestorEvents />} />
 
-
-              {/* Enterpreneur Routing  */}
+              {/* Enterpreneur Routing */}
               <Route path="/enterpreneur" element={<Enterpreneur />} />
               <Route path="/dailyEnterpreneur" element={<DailyEnterpreneur />} />
               <Route path="/weeklyEnterpreneur" element={<WeeklyEnterpreneur />} />
@@ -215,7 +211,7 @@ function App() {
               <Route path="/totalenterpreneurevents" element={<TotalEnterpreneurEvents />} />
               <Route path="/weeklyenterpreneurevents" element={<WeeklyEnterpreneurEvents />} />
 
-              {/* Viewer Routing  */}
+              {/* Viewer Routing */}
               <Route path="/viewers" element={<Viewer />} />
               <Route path="/dailyViewer" element={<DialyViewer />} />
               <Route path="/weeklyViewer" element={<WeeklyViewer />} />
@@ -241,13 +237,8 @@ function App() {
               <Route path="/monthlyviewerevents" element={<MonthlyViewerEvents />} />
               <Route path="/totalviewerevents" element={<TotalViewerEvents />} />
               <Route path="/weeklyviewerevents" element={<WeeklyViewerEvents />} />
-              {/* Question  */}
+              {/* Question */}
               <Route path="/addQuestion" element={<AddQuestion />} />
-
-
-              {/* Investor Enterpreneur Viewer User  */}
-              {/* <Route path="/dailyinvestoruser" element={<TotalViewer />} /> */}
-
             </Routes>
           </main>
         </div>
