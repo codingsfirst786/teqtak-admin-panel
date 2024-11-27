@@ -111,13 +111,14 @@ import MonthlyViewerEvents from "./scenes/AllEvents/ViewerEvents/MonthlyViewerEv
 import TotalViewerEvents from "./scenes/AllEvents/ViewerEvents/TotalViewerEvents";
 import WeeklyViewerEvents from "./scenes/AllEvents/ViewerEvents/WeeklyViewerEvents";
 import AddQuestion from "./scenes/question/AddQuestion";
-import Signup from "./scenes/Singup/Signup";
+import Signup from "./scenes/Singup/Login";
 import DailyJobs from "./scenes/GetJobs/DailyJobs";
 import WeeklyJobs from "./scenes/GetJobs/WeeklyJobs";
 import MonthlyJobs from "./scenes/GetJobs/MonthlyJobs";
 import DailyEvents from "./scenes/Events/DailyEvents";
 import WeeklyEvents from "./scenes/Events/WeeklyEvents";
 import MonthlyEvents from "./scenes/Events/MonthyEvents";
+import Login from "./scenes/Singup/Login";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -131,12 +132,12 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          {location.pathname !== '/signup' && <Sidebar isSidebar={isSidebar} />}
+          {location.pathname !== '/login' && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
-          {location.pathname !== '/signup' && <Topbar isSidebar={isSidebar} />}
+          {location.pathname !== '/login' && <Topbar isSidebar={isSidebar} />}
             <Routes>
 
-              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/" element={<Dashboard />} />
 
               {/* Other Routes */}
