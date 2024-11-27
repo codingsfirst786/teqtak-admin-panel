@@ -46,7 +46,6 @@ const Team = ({onBack, userId}) => {
         const result = await fetchData();
         console.log("Fetched data:", result);
 
-        // Set fetched data to state with active status as true by default
         const updatedData = result.data.map(user => ({
           ...user,
           active: true
@@ -81,12 +80,12 @@ const Team = ({onBack, userId}) => {
  
 
   const deActivateUser = async (id) => {
-    const data = { "isBlocked": "true" }
+    const data = { "isBlocked": "false" }
     console.log('deavtivating ', id)
-    const req = await fetch(`http://localhost:5000/users/${id}`, {
-      method: 'PUT',
+    const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json' // Set the correct content-type header
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     })
@@ -118,7 +117,6 @@ const Team = ({onBack, userId}) => {
     };
     getUserCount();
   }, []);
-
   const columns = [
     {
       field: "profile",
@@ -204,34 +202,7 @@ const Team = ({onBack, userId}) => {
       : { color: 'red', filter: 'blur(2px)', textDecoration: 'line-through' };
 
     return (
-      // <Box m="40px 0" display="flex" flexDirection="column" alignItems="center">
-      //   <Box sx={{ width: '50%', padding: '20px', backgroundColor: colors.primary[400], textAlign: 'center' }}>
-      //     <ArrowBackIcon onClick={handleBackClick} sx={{ cursor: 'pointer', fontSize: '2rem', mb: 2 }} />
-      //     <Typography variant="h4" sx={{ color: '#4CCEAC', margin: '8px', ...textStyle }} gutterBottom>
-      //       <Avatar alt={selectedUser.name} src={selectedUser.picUrl} sx={{ width: '100%', height: 'auto', maxWidth: '150px', border: `2px solid ${colors.grey[100]}` }} />
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       ID: {selectedUser.Users_PK}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Name: {selectedUser.name}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Password: {selectedUser.password}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Email: {selectedUser.email}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Role: {selectedUser.role}
-      //     </Typography>
-      //     <Button variant="contained" color={selectedUser.active ? 'success' : 'error'} onClick={() => handleActiveToggle(selectedUser.Users_PK)}>
-      //       {selectedUser.active ? 'Deactivate' : 'Activate'}
-      //     </Button>
-      //   </Box>
-      // </Box>
       <Box m="40px 0" display="flex" flexDirection="column" alignItems="center" >
-
         <Box
           display="flex"
           flexDirection={{ xs: 'column', sm: 'row' }}

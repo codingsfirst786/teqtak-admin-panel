@@ -198,7 +198,6 @@ const Videos = () => {
     </>
 
   );
-  // https://www.google.com/search?q=animated+10+second+short+video&sca_esv=c1e74fbf460359a3&sca_upv=1&rlz=1C1CHBF_enPK1119PK1119&biw=1366&bih=607&tbm=vid&sxsrf=ADLYWIKHT5tSyeTHUo3gKu_A35JsqfaaTA%3A1721820242023&ei=UuSgZveIAbqKkdUPypChkAM&oq=animated++10+secondvideo&gs_lp=Eg1nd3Mtd2l6LXZpZGVvIhhhbmltYXRlZCAgMTAgc2Vjb25kdmlkZW8qAggAMgoQIRigARjDBBgKMgoQIRigARjDBBgKSLUlUOgGWKcZcAB4AJABAJgBmwKgAYwVqgEEMi0xMbgBA8gBAPgBAZgCBqACiwzCAgUQABiABMICBBAAGB7CAgYQABgeGA_CAgYQABgFGB7CAgYQABgHGB7CAggQABgHGAgYHsICChAAGAgYDRgeGA_CAgsQABiABBiGAxiKBcICCBAhGKABGMMEmAMAiAYBkgcDMi02oAelPg&sclient=gws-wiz-video#
 };
 
 export default Videos;

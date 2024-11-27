@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
@@ -112,31 +112,33 @@ import TotalViewerEvents from "./scenes/AllEvents/ViewerEvents/TotalViewerEvents
 import WeeklyViewerEvents from "./scenes/AllEvents/ViewerEvents/WeeklyViewerEvents";
 import AddQuestion from "./scenes/question/AddQuestion";
 import Signup from "./scenes/Singup/Signup";
+import DailyJobs from "./scenes/GetJobs/DailyJobs";
+import WeeklyJobs from "./scenes/GetJobs/WeeklyJobs";
+import MonthlyJobs from "./scenes/GetJobs/MonthlyJobs";
 
 function App() {
   const [theme, colorMode] = useMode();
   const colors = tokens(theme.palette.mode);
   const [isSidebar, setIsSidebar] = useState(true);
+  const location = useLocation()
+
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          {location.pathname !== '/signup' && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
+          {location.pathname !== '/signup' && <Topbar isSidebar={isSidebar} />}
             <Routes>
-             
-              <Route path="/signup" element={<Signup />} />
 
-              {/* Default route for the dashboard */}
+              <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<Dashboard />} />
 
               {/* Other Routes */}
               <Route path="/videos" element={<Videos />} />
               <Route path="/podcast" element={<Podcast />} />
-              <Route path="/jobs" element={<GetJobs />} />
               <Route path="/admin-profile" element={<AdminProfile />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
@@ -150,6 +152,11 @@ function App() {
               <Route path="/user" element={<InvestorTable />} />
               <Route path="/notification" element={<Notifications />} />
               <Route path="/notificationUser" element={<NotificationUser />} />
+              {/* Jobs  */}
+              <Route path="/jobs" element={<GetJobs />} />
+              <Route path="/dailyJobs" element={<DailyJobs />} />
+              <Route path="/weeklyJobs" element={<WeeklyJobs />} />
+              <Route path="/monthlyJobs" element={<MonthlyJobs />} />
 
               {/* User Routing */}
               <Route path="/team" element={<Team />} />

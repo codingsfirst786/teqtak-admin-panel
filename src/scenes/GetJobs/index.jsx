@@ -14,8 +14,9 @@ import axios from "axios";
 const GetJobs = () => {
 
   const [count, setCount] = useState(0)
-  
   const [jobs, setJobs] = useState([])
+  const navigate = useNavigate()
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -39,6 +40,16 @@ const GetJobs = () => {
     }
     getData();
   }, [])
+
+  const handleDailyJobs = () => {
+    navigate('/dailyJobs')
+  }
+  const handleWeeklyJobs = () => {
+    navigate('/weeklyJobs')
+  }
+  const handleMonthlyJobs = () => {
+    navigate('/monthlyJobs')
+  }
  
   const toggleActivation = async (jobId, currentStatus) => {
     try {
@@ -73,10 +84,7 @@ const GetJobs = () => {
           alignItems="center"
           gridColumn="span 6"
         >
-          <Header title="TOTAL Jobs" subtitle="Managing the All JObs" />
-          <Button variant="contained" color="primary">
-            DELETE JOBS
-          </Button>
+          <Header title="TOTAL Jobs" subtitle="Managing the All Jobs" />
         </Box>
       </Box>
 
@@ -91,6 +99,7 @@ const GetJobs = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleDailyJobs}
         >
           <StatBox
             subtitle="Daily Jobs"
@@ -100,8 +109,6 @@ const GetJobs = () => {
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
-
-
           />
         </Box>
         <Box
@@ -110,6 +117,7 @@ const GetJobs = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleWeeklyJobs}
         >
           <StatBox
             title="90"
@@ -129,6 +137,7 @@ const GetJobs = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleMonthlyJobs}
         >
           <StatBox
             title="60"
@@ -162,14 +171,14 @@ const GetJobs = () => {
       <Box my={3} backgroundColor={colors.primary[400]} p={4}>
         <Box
           display="flex"
-          flexWrap="wrap" // Ensures items wrap to the next line
+          flexWrap="wrap" 
           gap={2}
-          overflow="hidden" // Removes scrollbar
+          overflow="hidden" 
         >
           {jobs.map((job, index) => (
             <Box
-              height="auto" // Change to auto to fit content
-              width={{ xs: "100%", sm: "48%", md: "32%" }} // Adjust width for responsiveness
+              height="auto" 
+              width={{ xs: "100%", sm: "48%", md: "32%" }}
               flexShrink={0}
               boxShadow={3}
               borderRadius={2}
@@ -177,7 +186,7 @@ const GetJobs = () => {
               borderColor="grey.300"
               position="relative"
               p={2}
-              mb={2} // Add margin bottom for spacing
+              mb={2} 
             >
               <Box>
                 <Box display="flex" gap={2} alignItems="center">

@@ -14,7 +14,7 @@ import img from '../podcast/image1.jpeg'
 const Ticket = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [tickets, setTickets] = useState([]); // State to hold fetched data
+  const [tickets, setTickets] = useState([]); 
   const [count, setCount] = useState(0)
   const navigate = useNavigate();
 
@@ -28,7 +28,6 @@ const Ticket = () => {
         console.log("Fetched data:", result);
         const updatedData = result.data.map(ticket => ({
           ...ticket,
-          // active: true
         }));
 
         console.log(result.count)
@@ -68,19 +67,24 @@ const Ticket = () => {
 
   const columns = [
     {
-      field: "profile",
-      headerName: "Profile",
+      field: "eventlocation",
+      headerName: "Event Location",
       flex: 1,
-      renderCell: (params) => (
-        <Avatar alt={img} src={params.row.picUrl} />
-      ),
+      valueGetter: (params) => params.row.event.eventLocation,
+      cellClassName: (params) => params.row.active ? "" : "inactive",
     },
-    // { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK },
     {
       field: "ticketBuyerId",
-      headerName: "Buyer Id",
+      headerName: "Buyer Name",
       flex: 1,
-      valueGetter: (params) => params.row.ticketBuyerId,
+      valueGetter: (params) => params.row.buyer.name,
+      cellClassName: (params) => params.row.active ? "" : "inactive",
+    },
+    {
+      field: "ticketSellerId",
+      headerName: "Seller Name",
+      flex: 1,
+      valueGetter: (params) => params.row.seller.name,
       cellClassName: (params) => params.row.active ? "" : "inactive",
     },
     {
@@ -96,20 +100,6 @@ const Ticket = () => {
       flex: 1,
       valueGetter: (params) => params.row.ticketEventId,
       cellClassName: (params) => params.row.active ? "" : "inactive",
-    },
-    {
-      field: "ticketSellerId",
-      headerName: "Seller Id",
-      flex: 1,
-      valueGetter: (params) => params.row.ticketSellerId,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
-    },
-    {
-      field: "updatedAt",
-      headerName: "Updated At",
-      flex: 1,
-      valueGetter: (params) => params.row.updatedAt,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
     }
    
   ];
@@ -124,7 +114,7 @@ const Ticket = () => {
           </Box>
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center">
+          {/* <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center">
             <StatBox
               subtitle="Daily Tickets"
               title="40"
@@ -144,7 +134,7 @@ const Ticket = () => {
               subtitle="Monthly Tickets"
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
-          </Box>
+          </Box> */}
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center">
             <StatBox
               title={`${count}`}

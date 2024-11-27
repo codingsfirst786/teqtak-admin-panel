@@ -40,7 +40,7 @@ const Signup = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
+        minHeight: "87vh",
         backgroundColor: colors.primary[400], // Using the same background color as Events
         padding: "20px",
       }}
