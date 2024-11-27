@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
+import { fetchAllJobsCount } from "../../Api/Jobs/AllJobsCount";
 
 const DailyJobs = () => {
     const [jobs, setJobs] = useState([]);
@@ -12,27 +13,39 @@ const DailyJobs = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
+    //             );
+    //             const result = response.data;
+
+    //             const updatedData = result.data.map((user) => ({
+    //                 ...user,
+    //                 active: true,
+    //             }));
+
+    //             setJobs(updatedData);
+    //         } catch (error) {
+    //             console.error("Fetching data error", error);
+    //         }
+    //     };
+    //     getData();
+    // }, []);
+
     useEffect(() => {
-        const getData = async () => {
+        const getUserCount = async () => {
             try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
-                );
-                const result = response.data;
+                const users = await fetchAllJobsCount();
+                setJobs(users.todayJobs);
 
-                const updatedData = result.data.map((user) => ({
-                    ...user,
-                    active: true,
-                }));
-
-                setJobs(updatedData);
             } catch (error) {
-                console.error("Fetching data error", error);
+                console.log(error);
             }
         };
-        getData();
+        getUserCount();
     }, []);
-
     const toggleActivation = async (jobId, currentStatus) => {
         try {
             const updatedStatus = currentStatus === "true" ? "false" : "true";

@@ -167,13 +167,13 @@ const Enterpreneur = ({ onBack }) => {
            onClick={() => handleViewProfileClick(params.row)}>
             Profile
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             color="secondary"
             onClick={() => handleDelete(params.row.Users_PK)}  // Pass dynamic ID here
           >
             Delete
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             color={params.row.active ? "success" : "error"}

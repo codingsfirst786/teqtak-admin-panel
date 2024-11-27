@@ -115,6 +115,9 @@ import Signup from "./scenes/Singup/Signup";
 import DailyJobs from "./scenes/GetJobs/DailyJobs";
 import WeeklyJobs from "./scenes/GetJobs/WeeklyJobs";
 import MonthlyJobs from "./scenes/GetJobs/MonthlyJobs";
+import DailyEvents from "./scenes/Events/DailyEvents";
+import WeeklyEvents from "./scenes/Events/WeeklyEvents";
+import MonthlyEvents from "./scenes/Events/MonthyEvents";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -147,11 +150,15 @@ function App() {
               <Route path="/meetings" element={<Meeting />} />
               <Route path="/tickets" element={<Ticket />} />
               <Route path="/traffic" element={<InvestorTable />} />
-              <Route path="/events" element={<Events />} />
               <Route path="/geography" element={<Geography />} />
               <Route path="/user" element={<InvestorTable />} />
               <Route path="/notification" element={<Notifications />} />
               <Route path="/notificationUser" element={<NotificationUser />} />
+              {/* Events  */}
+              <Route path="/events" element={<Events />} />
+              <Route path="/dailyEvents" element={<DailyEvents />} />
+              <Route path="/weeklyEvents" element={<WeeklyEvents  />} />
+              <Route path="/monthlyEvents" element={<MonthlyEvents />} />
               {/* Jobs  */}
               <Route path="/jobs" element={<GetJobs />} />
               <Route path="/dailyJobs" element={<DailyJobs />} />

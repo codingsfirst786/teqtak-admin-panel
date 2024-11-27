@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import axios from "axios";
+import { fetchAllJobsCount } from "../../Api/Jobs/AllJobsCount";
 
 const MonthlyJobs = () => {
     const [jobs, setJobs] = useState([]);
@@ -12,25 +13,38 @@ const MonthlyJobs = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
+    //             );
+    //             const result = response.data;
+
+    //             const updatedData = result.data.map((user) => ({
+    //                 ...user,
+    //                 active: true,
+    //             }));
+
+    //             setJobs(updatedData);
+    //         } catch (error) {
+    //             console.error("Fetching data error", error);
+    //         }
+    //     };
+    //     getData();
+    // }, []);
+
     useEffect(() => {
-        const getData = async () => {
+        const getUserCount = async () => {
             try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
-                );
-                const result = response.data;
+                const users = await fetchAllJobsCount();
+                setJobs(users.monthlyJobs );
 
-                const updatedData = result.data.map((user) => ({
-                    ...user,
-                    active: true,
-                }));
-
-                setJobs(updatedData);
             } catch (error) {
-                console.error("Fetching data error", error);
+                console.log(error);
             }
         };
-        getData();
+        getUserCount();
     }, []);
 
     const toggleActivation = async (jobId, currentStatus) => {
@@ -78,7 +92,7 @@ const MonthlyJobs = () => {
 
             {jobs.length === 0 ? (
                 <Typography variant="h1" textAlign="center" color="textSecondary">
-                    No job posts today
+                    No job posts This Month
                 </Typography>
             ) : (
                 <Box my={3} backgroundColor={colors.primary[400]} p={4}>

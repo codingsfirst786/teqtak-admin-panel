@@ -13,11 +13,15 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import axios from "axios";
+import { fetchAllEventsCount } from "../../Api/Events/AllEventsCount";
 
 const Events = () => {
-  const [currentEvents, setCurrentEvents] = useState([]);
+  // const [currentEvents, setCurrentEvents] = useState([]);
   const [count, setCount] = useState(0);
   const [events, setEvents] = useState([]);
+  const [dailyEventsCount, setDailyEventsCount] = useState(0)
+  const [monthlyEventsCount, setMonthlyEventsCount] = useState(0)
+  const [weeklyEventsCount, setWeeklyEventsCount] = useState(0)
 
   useEffect(() => {
     const getData = async () => {
@@ -44,9 +48,24 @@ const Events = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const getUserCount = async () => {
+      try {
+        const users = await fetchAllEventsCount(); 
+        setDailyEventsCount(users.count.daily);
+        setWeeklyEventsCount(users.count.weekly)
+        setMonthlyEventsCount(users.count.monthly)
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserCount();
+  }, []);
+
 
   const handleToggleActivation = async (eventId, currentStatus) => {
-    console.log("this is event id ",eventId)
+    console.log("this is event id ", eventId)
     try {
       const updatedStatus = currentStatus === "true" ? "false" : "true"; // Toggle the status
       const response = await axios.put(`${process.env.REACT_APP_BACK_URL}/events/${eventId}`, {
@@ -54,7 +73,7 @@ const Events = () => {
       });
 
       const updatedEvent = response.data;
-console.log("hello asdfasd", updatedEvent)
+      console.log("hello asdfasd", updatedEvent)
       // Update the state to reflect the changes in the UI
       setEvents((prevEvents) =>
         prevEvents.map((event) =>
@@ -69,20 +88,20 @@ console.log("hello asdfasd", updatedEvent)
     }
   };
 
-  const CardComponent = ({ title, imgSrc }) => (
-    <Card sx={{ height: '30vh', width: { lg: '12vw', md: '15vw', sm: '20vw', xs: '25vw' }, position: 'relative', cursor: 'pointer', m: 0 }} >
-      <CardMedia component="img" image={imgSrc} alt="Card Img" sx={{ height: '100%', width: '100%', borderRadius: 1 }} />
-      <CardContent sx={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', bgcolor: 'rgba(0, 0, 0, 0.5)', borderRadius: 1 }}>
-        <Typography variant="h5" component="div" sx={{ color: 'white', position: 'absolute', bottom: 2, left: 3 }}>{title}</Typography>
-        <BookmarkBorderIcon sx={{ position: 'absolute', right: 2, top: 4, color: 'white', fontSize: '2rem' }} />
-      </CardContent>
-    </Card>
-  );
 
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const handleDailyEvents = () => {
+    navigate('/dailyEvents')
+  }
+  const handleWeeklyEvents = () => {
+    navigate('/weeklyEvents')
+  }
+  const handleMonthlyEvents = () => {
+    navigate('/monthlyEvents')
+  }
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Header title="Event" />
@@ -99,10 +118,11 @@ console.log("hello asdfasd", updatedEvent)
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleDailyEvents}
         >
           <StatBox
             subtitle="Daily Events"
-            title="40"
+            title={dailyEventsCount}
             icon={
               <EventAvailableIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -116,9 +136,10 @@ console.log("hello asdfasd", updatedEvent)
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleWeeklyEvents}
         >
           <StatBox
-            title="90"
+            title={weeklyEventsCount}
             subtitle="Weekly Events"
             icon={
               <DateRangeIcon
@@ -133,9 +154,10 @@ console.log("hello asdfasd", updatedEvent)
           display="flex"
           alignItems="center"
           justifyContent="center"
+          onClick={handleMonthlyEvents}
         >
           <StatBox
-            title="60"
+            title={monthlyEventsCount}
             subtitle="Monthly Events"
             icon={
               <EventNoteIcon
@@ -180,12 +202,12 @@ console.log("hello asdfasd", updatedEvent)
                     <Typography variant="body2" style={{ fontSize: '0.875rem', color: 'white', padding: '2% 0' }}>Location: {event.eventLocation}</Typography>
                     <Typography variant="body1" style={{ fontSize: '1rem', color: 'white', paddingBottom: '2%' }}>Date: {event.eventDate}</Typography>
                     <Button
-              variant="contained"
-              color={event.isActivated === "true" ? "error" : "primary"}
-              onClick={() => handleToggleActivation(event._id, event.isActivated)}
-            >
-              {event.isActivated === "true" ? "Deactivate" : "Activate"}
-            </Button>
+                      variant="contained"
+                      color={event.isActivated === "true" ? "error" : "primary"}
+                      onClick={() => handleToggleActivation(event._id, event.isActivated)}
+                    >
+                      {event.isActivated === "true" ? "Deactivate" : "Activate"}
+                    </Button>
                   </div>
                 </div>
               </Grid>

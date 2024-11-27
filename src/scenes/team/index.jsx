@@ -77,6 +77,10 @@ const Team = ({onBack, userId}) => {
     setSelectedUser(user); 
   };
 
+   const handleBackClick = () => {
+    setSelectedUser(null); 
+  };
+
  
 
   const deActivateUser = async (id) => {
@@ -117,6 +121,7 @@ const Team = ({onBack, userId}) => {
     };
     getUserCount();
   }, []);
+
   const columns = [
     {
       field: "profile",
@@ -256,7 +261,7 @@ const Team = ({onBack, userId}) => {
             <Typography variant="body2" color={colors.grey[100]} gutterBottom>
               Global rating
             </Typography>
-            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={onBack}>
+            <Button variant="contained" sx={{ backgroundColor: '#4CCEAC', marginTop: '20px' }} onClick={handleBackClick}>
               Back to List
             </Button>
           </Box>
@@ -323,7 +328,7 @@ const Team = ({onBack, userId}) => {
       <Box>
         <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
           <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">
-            <Header title="TOTAL ENTERPRENEUR" subtitle="Managing the All Enterpreneur" />
+            <Header title="TOTAL USERS" subtitle="Managing the All Users" />
           </Box>
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">

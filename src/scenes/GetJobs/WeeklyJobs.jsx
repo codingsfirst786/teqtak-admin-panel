@@ -1,10 +1,11 @@
 import { Box, useTheme, Button, Typography, IconButton } from "@mui/material";
-import { ArrowBack } from "@mui/icons-material"; 
+import { ArrowBack } from "@mui/icons-material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { fetchAllJobsCount } from "../../Api/Jobs/AllJobsCount";
 
 const WeeklyJobs = () => {
     const [jobs, setJobs] = useState([]);
@@ -12,27 +13,40 @@ const WeeklyJobs = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         try {
+    //             const response = await axios.get(
+    //                 `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
+    //             );
+    //             const result = response.data;
+
+    //             const updatedData = result.data.map((user) => ({
+    //                 ...user,
+    //                 active: true,
+    //             }));
+
+    //             setJobs(updatedData);
+    //         } catch (error) {
+    //             console.error("Fetching data error", error);
+    //         }
+    //     };
+    //     getData();
+    // }, []);
+
     useEffect(() => {
-        const getData = async () => {
+        const getUserCount = async () => {
             try {
-                const response = await axios.get(
-                    `${process.env.REACT_APP_BACK_URL}/admin/info/jobs`
-                );
-                const result = response.data;
+                const users = await fetchAllJobsCount();
+                setJobs(users.weeklyJobs);
 
-                const updatedData = result.data.map((user) => ({
-                    ...user,
-                    active: true,
-                }));
-
-                setJobs(updatedData);
             } catch (error) {
-                console.error("Fetching data error", error);
+                console.log(error);
             }
         };
-        getData();
+        getUserCount();
     }, []);
-
+    
     const toggleActivation = async (jobId, currentStatus) => {
         try {
             const updatedStatus = currentStatus === "true" ? "false" : "true";
@@ -78,14 +92,14 @@ const WeeklyJobs = () => {
 
             {jobs.length === 0 ? (
                 <Typography variant="h1" textAlign="center" color="textSecondary">
-                    No job posts today
+                    No job posts This Week
                 </Typography>
             ) : (
                 <Box my={3} backgroundColor={colors.primary[400]} p={4}>
                     <Box display="flex" flexWrap="wrap" gap={2} overflow="hidden">
                         {jobs.map((job, index) => (
                             <Box
-                                key={job._id} 
+                                key={job._id}
                                 height="auto"
                                 width={{ xs: "100%", sm: "48%", md: "32%" }}
                                 flexShrink={0}

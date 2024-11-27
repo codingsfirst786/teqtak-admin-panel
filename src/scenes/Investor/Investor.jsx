@@ -67,7 +67,7 @@ const Investor = ({ onBack }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/investers`)
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/investors`)
         const result = await response.data;
         const updatedData = result.data.data.map(user => ({
           ...user,
@@ -171,13 +171,13 @@ const Investor = ({ onBack }) => {
           >
             Profile
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row.Users_PK)}  // Pass dynamic ID here
+            onClick={() => handleDelete(params.row.Users_PK)} 
           >
             Delete
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             color={params.row.active ? "success" : "error"}

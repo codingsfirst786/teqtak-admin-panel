@@ -8,6 +8,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import Header from "../../components/Header";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { fetchAllJobsCount } from "../../Api/Jobs/AllJobsCount";
 
 
 
@@ -16,6 +17,9 @@ const GetJobs = () => {
   const [count, setCount] = useState(0)
   const [jobs, setJobs] = useState([])
   const navigate = useNavigate()
+  const [dailyJobsCount, setDailyJobsCount] = useState(0)
+  const [monthlyJobsCount, setMonthlyJobsCount] = useState(0)
+  const [weeklyJobsCount, setWeeklyJobsCount] = useState(0)
 
   useEffect(() => {
     const getData = async () => {
@@ -51,6 +55,23 @@ const GetJobs = () => {
     navigate('/monthlyJobs')
   }
  
+  // Get Count By Date 
+  useEffect(() => {
+    const getUserCount = async () => {
+      try {
+        const users = await fetchAllJobsCount(); 
+        setDailyJobsCount(users.count.daily);
+        console.log('fasgdjvljhbsagFDSHGKL;DFSAgsdhl;kdgsadhfjkl', users)
+        setWeeklyJobsCount(users.count.weekly)
+        setMonthlyJobsCount(users.count.monthly)
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserCount();
+  }, []);
+
   const toggleActivation = async (jobId, currentStatus) => {
     try {
       const updatedStatus = currentStatus === "true" ? "false" : "true";
@@ -59,7 +80,6 @@ const GetJobs = () => {
       });
       const updatedJob = response.data;
 
-      // Update the local state to reflect the new status
       setJobs(jobs.map(job =>
         job._id === jobId ? { ...job, isActivated: updatedJob.isActivated } : job
       ));
@@ -84,7 +104,7 @@ const GetJobs = () => {
           alignItems="center"
           gridColumn="span 6"
         >
-          <Header title="TOTAL Jobs" subtitle="Managing the All Jobs" />
+          <Header title="TOTAL JOBS" subtitle="Managing the All Jobs" />
         </Box>
       </Box>
 
@@ -103,7 +123,7 @@ const GetJobs = () => {
         >
           <StatBox
             subtitle="Daily Jobs"
-            title="40"
+            title = {dailyJobsCount}
             icon={
               <WorkIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -120,7 +140,7 @@ const GetJobs = () => {
           onClick={handleWeeklyJobs}
         >
           <StatBox
-            title="90"
+            title={weeklyJobsCount}
             subtitle="Weekly Jobs"
             icon={
               <WorkIcon
@@ -140,7 +160,7 @@ const GetJobs = () => {
           onClick={handleMonthlyJobs}
         >
           <StatBox
-            title="60"
+            title={monthlyJobsCount}
             subtitle="Monthly Jobs"
 
             icon={

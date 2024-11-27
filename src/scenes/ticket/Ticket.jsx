@@ -138,7 +138,7 @@ const Ticket = () => {
           <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center">
             <StatBox
               title={`${count}`}
-              subtitle="Total Enterpreneur"
+              subtitle="Total Tickets"
               icon={<TrafficIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
