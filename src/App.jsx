@@ -119,6 +119,9 @@ import DailyEvents from "./scenes/Events/DailyEvents";
 import WeeklyEvents from "./scenes/Events/WeeklyEvents";
 import MonthlyEvents from "./scenes/Events/MonthyEvents";
 import Login from "./scenes/Singup/Login";
+import DailyVideos from "./scenes/Videos/DailyVideos";
+import WeeklyVideos from "./scenes/Videos/WeeklyVideos";
+import MonthlyVideos from "./scenes/Videos/MonthlyVideos";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -141,7 +144,6 @@ function App() {
               <Route path="/" element={<Dashboard />} />
 
               {/* Other Routes */}
-              <Route path="/videos" element={<Videos />} />
               <Route path="/podcast" element={<Podcast />} />
               <Route path="/admin-profile" element={<AdminProfile />} />
               <Route path="/pie" element={<Pie />} />
@@ -155,6 +157,12 @@ function App() {
               <Route path="/user" element={<InvestorTable />} />
               <Route path="/notification" element={<Notifications />} />
               <Route path="/notificationUser" element={<NotificationUser />} />
+
+              {/* Videos  */}
+              <Route path="/videos" element={<Videos />} />
+              <Route path="/dailyVideos" element={<DailyVideos />} />
+              <Route path="/weeklyVideos" element={<WeeklyVideos />} />
+              <Route path="/monthlyVideos" element={<MonthlyVideos />} />
               {/* Events  */}
               <Route path="/events" element={<Events />} />
               <Route path="/dailyEvents" element={<DailyEvents />} />

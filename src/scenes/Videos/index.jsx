@@ -2,23 +2,29 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import TrafficIcon from "@mui/icons-material/Traffic";
 import StatBox from "../../components/StatBox";
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import Button from '@mui/material/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BackspaceIcon from '@mui/icons-material/Backspace';
+import { useNavigate } from "react-router-dom";
+import { fetchAllVideoCount } from "../../Api/Video/AllVideoCount";
 
 
 const Videos = () => {
+  const navigate = useNavigate()
   const [count, setCount] = useState(0)
   const [videos, setVideos] = useState([])
-  // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/upload';
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [dailyVideosCount, setDailyVideosCount] = useState(0)
+  const [monthlyVideosCount, setMonthlyVideosCount] = useState(0)
+  const [weeklyVideosCount, setWeeklyVideosCount] = useState(0)
+
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -40,22 +46,44 @@ const Videos = () => {
     }
     getData();
   }, [])
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
 
+  // Get Count By Date 
+  useEffect(() => {
+    const getVideoCount = async () => {
+      try {
+        const users = await fetchAllVideoCount();
+        setDailyVideosCount(users.count.daily);
+        console.log('fasgdjvljhbsagFDSHGKL;DFSAgsdhl;kdgsadhfjkl', users)
+        setWeeklyVideosCount(users.count.weekly)
+        setMonthlyVideosCount(users.count.monthly)
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getVideoCount();
+  }, []);
 
   const handleDeleteVideo = async (vidId) => {
     try {
-      // Make a DELETE request to the API to delete the video by ID
       await axios.post(`http://localhost:5000/upload/delete/${vidId}`);
-      
-      // Remove the deleted video from the state
+
       setVideos((prevVideos) => prevVideos.filter((video) => video._id !== vidId));
-      
+
     } catch (error) {
       console.error("Error deleting video:", error);
     }
   };
+
+  const handleDailyVideos = () => {
+    navigate('/dailyVideos')
+  }
+  const handleWeeklyVideos = () => {
+    navigate('/weeklyVideos')
+  }
+  const handleMonthlyVideos = () => {
+    navigate('/monthlyVideos')
+  }
   return (
     <>
 
@@ -92,10 +120,11 @@ const Videos = () => {
               display="flex"
               alignItems="center"
               justifyContent="center"
+              onClick={handleDailyVideos}
             >
               <StatBox
                 subtitle="Daily Video"
-                title="40"
+                title={dailyVideosCount}
                 icon={
                   <PlayCircleIcon
                     sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -111,9 +140,10 @@ const Videos = () => {
               display="flex"
               alignItems="center"
               justifyContent="center"
+              onClick={handleWeeklyVideos}
             >
               <StatBox
-                title="90"
+                title={weeklyVideosCount}
                 subtitle="Weekly Video"
                 icon={
                   <OndemandVideoIcon
@@ -130,9 +160,10 @@ const Videos = () => {
               display="flex"
               alignItems="center"
               justifyContent="center"
+              onClick={handleMonthlyVideos}
             >
               <StatBox
-                title="60"
+                title={monthlyVideosCount}
                 subtitle="Monthly Video"
 
                 icon={
@@ -183,10 +214,10 @@ const Videos = () => {
                   height={"200px"}
                   style={{ objectFit: "cover" }}
                   controls
-                ></video>                                                                                                  
+                ></video>
                 <Typography px={1} borderRadius={1} position={'relative'} zIndex={'1'} top={-200} left={134}>
-                  <BackspaceIcon 
-                  onClick={() => handleDeleteVideo(video._id)}
+                  <BackspaceIcon
+                    onClick={() => handleDeleteVideo(video._id)}
                   />
                 </Typography>
               </Box>

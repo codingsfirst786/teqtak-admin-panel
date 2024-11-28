@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchAllVideoCount } from "../../Api/Video/AllVideoCount";
 
 
-const DailyVideos = () => {
+const MonthlyVideos = () => {
   const [videos, setVideos] = useState([])
   const navigate = useNavigate()
 
@@ -18,8 +18,7 @@ const DailyVideos = () => {
     const getVideoCount = async () => {
         try {
             const users = await fetchAllVideoCount();
-            setVideos(users.todayVideos);
-            console.log("sdvcbjncshcbscsc  chgasuics  ygcsch csdc", users)
+            setVideos(users.monthlyVideos);
 
         } catch (error) {
             console.log(error);
@@ -109,4 +108,4 @@ const DailyVideos = () => {
   );
 };
 
-export default DailyVideos;
+export default MonthlyVideos;
