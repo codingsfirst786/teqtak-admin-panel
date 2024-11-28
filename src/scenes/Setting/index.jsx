@@ -4,7 +4,7 @@ import PieChart from "../../components/PieChart";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const Pie = () => {
+const Setting = () => {
 
   const [data, setData] = useState([])
 
@@ -21,7 +21,7 @@ const Pie = () => {
 
   console.log('My array Data is ', data)
   return (
-    <Box m="20px">
+    <Box m="20px" sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Header title="Setting" />
 
       {data.map((item, i) => (
@@ -34,4 +34,4 @@ const Pie = () => {
   );
 };
 
-export default Pie;
+export default Setting;

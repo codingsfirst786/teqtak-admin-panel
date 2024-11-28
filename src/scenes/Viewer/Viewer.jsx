@@ -93,7 +93,7 @@ const Viewer = ({ onBack }) => {
     getData();
   }, [])
 
-  const handleDelete = async (userId) => {  
+  const handleDelete = async (userId) => {
 
     try {
       // Sending DELETE request
@@ -106,20 +106,33 @@ const Viewer = ({ onBack }) => {
       console.error("Error deleting user:", error);
     }
   };
-  
-  const deActivateUser = async (id) => {
-    const data = { "isBlocked": "true" }
-    console.log('deavtivating ', id)
-    const req = await fetch(`http://localhost:5000/users/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json' // Set the correct content-type header
-      },
-      body: JSON.stringify(data)
-    })
-    const d = await req.json()
-    console.log({ d })
-  }
+
+
+  const deActivateUser = async (id, currentStatus) => {
+    console.log(currentStatus, "currentStatus");
+
+    const isBlocked = currentStatus === "true";
+    const updatedStatus = !isBlocked;
+    const data = { "isBlocked": updatedStatus.toString() };
+
+    console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
+
+    try {
+      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const response = await req.json();
+      console.log('Response:', response);
+
+    } catch (error) {
+      console.error('Error updating user status:', error);
+    }
+  };
 
   const handleBackClick = () => {
     setSelectedUser(null)
@@ -128,7 +141,7 @@ const Viewer = ({ onBack }) => {
   useEffect(() => {
     const getUserCount = async () => {
       try {
-        const users = await fetchAllViewersCount(); 
+        const users = await fetchAllViewersCount();
         setDailyViewerCount(users.count.daily);
         setWeeklyViewerCount(users.count.weekly)
         setMonthlyViewerCount(users.count.monthly)
@@ -141,7 +154,7 @@ const Viewer = ({ onBack }) => {
 
   // /////////////////////////////////////////////  //
   const columns = [
-    { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK,  minWidth: 150 },
+    { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK, minWidth: 150 },
     {
       field: "name",
       headerName: "Name",
@@ -187,11 +200,10 @@ const Viewer = ({ onBack }) => {
           </Button> */}
           <Button
             variant="contained"
-            color={params.row.active ? "success" : "error"}
+            color={params.row.isBlocked === "true" ? "error" : "success"}
             onClick={() => {
-              handleActiveToggle(params.row.Users_PK);
-              console.log(params.row.Users_PK)
-              deActivateUser(params.row.Users_PK)
+              console.log("Helllo ", params.row.Users_PK, params.row.isBlocked);
+              deActivateUser(params.row.Users_PK, params.row.isBlocked);
             }}
           >
             {params.row.active ? "Deactivate" : "Activate"}

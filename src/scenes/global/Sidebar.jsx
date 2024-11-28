@@ -8,7 +8,7 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PodcastsIcon from '@mui/icons-material/Podcasts';
-import WorkIcon from '@mui/icons-material/Work';
+import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -18,14 +18,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import PreviewIcon from '@mui/icons-material/Preview';
-import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
+import VideoCameraFrontOutlinedIcon from '@mui/icons-material/VideoCameraFrontOutlined';
 import BlockIcon from '@mui/icons-material/Block';
-import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
-
-
-
+import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined'
 
 
 const Sidebar = () => {
@@ -167,7 +165,7 @@ const Sidebar = () => {
               active={selected === "Jobs"}
               style={{ color: colors.grey[100] }}
               onClick={() => setSelected("Jobs")}
-              icon={<WorkIcon />}
+              icon={<WorkOutlineOutlinedIcon />}
             >
               <Typography>Jobs</Typography>
               <Link to="/jobs" />
@@ -187,7 +185,7 @@ const Sidebar = () => {
               active={selected === "Meeting"}
               style={{ color: colors.grey[100] }}
               onClick={() => setSelected("Meeting")}
-              icon={<VideoCameraFrontIcon />}
+              icon={<VideoCameraFrontOutlinedIcon />}
             >
               <Typography>Meeting</Typography>
               <Link to="/meetings" />
@@ -197,7 +195,7 @@ const Sidebar = () => {
               active={selected === "Ticket"}
               style={{ color: colors.grey[100] }}
               onClick={() => setSelected("Ticket")}
-              icon={<LocalActivityIcon />}
+              icon={<LocalActivityOutlinedIcon />}
             >
               <Typography>Ticket</Typography>
               <Link to="/tickets" />
@@ -221,6 +219,16 @@ const Sidebar = () => {
             >
               <Typography>Notification</Typography>
               <Link to="/notification" />
+            </MenuItem>
+
+            <MenuItem
+              active={selected === "Reports"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Reports")}
+              icon={<ReportGmailerrorredOutlinedIcon />}
+            >
+              <Typography>Reports</Typography>
+              <Link to="/report" />
             </MenuItem>
 
             <MenuItem
@@ -251,15 +259,15 @@ const Sidebar = () => {
               <Link to="/admin-profile" />
             </MenuItem>
 
-            <MenuItem
+            {/* <MenuItem
               active={selected === "Setting"}
               style={{ color: colors.grey[100] }}
               onClick={() => setSelected("Setting")}
               icon={<SettingsOutlinedIcon />}
             >
               <Typography>Setting</Typography>
-              <Link to="/pie" />
-            </MenuItem>
+              <Link to="/setting" />
+            </MenuItem> */}
           </Box>
         </Menu>
       </ProSidebar>

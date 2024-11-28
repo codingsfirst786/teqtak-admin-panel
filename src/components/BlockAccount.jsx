@@ -15,7 +15,7 @@ function BlockAccount() {
 
   }, [render])
   const blockedUser = async () => {
-    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/block`, {
+    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/blocked`, {
       method: 'GET',
       credentials: 'include'
     })
@@ -26,8 +26,8 @@ function BlockAccount() {
   const activateUser = async (id) => {
     const data = { "isBlocked": "false" }
     console.log('avtivating ', id)
-    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/users/${id}`, {
-      method: 'PUT',
+    const req = await fetch(`${process.env.REACT_APP_BACK_URL}/users/update/${id}`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json' 
       },

@@ -53,7 +53,7 @@ const Investor = ({ onBack }) => {
   useEffect(() => {
     const getUserCount = async () => {
       try {
-        const users = await fetchAllInvestorsCount(); 
+        const users = await fetchAllInvestorsCount();
         setDailyInvestorCount(users.count.daily);
         setWeeklyInvestorCount(users.count.weekly)
         setMonthlyInvestorCount(users.count.monthly)
@@ -85,44 +85,33 @@ const Investor = ({ onBack }) => {
     getData();
   }, [])
 
-  const handleDelete = async (userId) => {
+
+  const deActivateUser = async (id, currentStatus) => {
+    console.log(currentStatus, "currentStatus");
+
+    const isBlocked = currentStatus === "true";
+    const updatedStatus = !isBlocked;
+    const data = { "isBlocked": updatedStatus.toString() };
+
+    console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
 
     try {
-      // Sending DELETE request
-      const response = await axios.delete(`${process.env.REACT_APP_BACK_URL}/admin/${userId}`);
-      if (response.status === 200) {
-        console.log("User deleted successfully:", response.data);
-        // Optionally refresh the data or update the UI
-      }
+      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const response = await req.json();
+      console.log('Response:', response);
+
     } catch (error) {
-      console.error("Error deleting user:", error);
+      console.error('Error updating user status:', error);
     }
   };
 
-  const handleActiveToggle = (userId) => {
-    const updatedEntrepreneurData = investors.map((user) =>
-      user.Users_PK === userId ? { ...user, active: !user.active } : user
-    );
-    setInvestors(updatedEntrepreneurData);
-    if (selectedUser && selectedUser.Users_PK === userId) {
-      setSelectedUser({ ...selectedUser, active: !selectedUser.active });
-    }
-  };
-
-  const deActivateUser = async (id) => {
-    const data = { "isBlocked": "true" }
-    console.log('deavtivating ', id)
-    const req = await fetch(`http://localhost:5000/users/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json' // Set the correct content-type header
-      },
-      body: JSON.stringify(data)
-    })
-    const d = await req.json()
-    console.log({ d })
-  }
-  
   const handleBackClick = () => {
     setSelectedUser(null)
   }
@@ -132,7 +121,7 @@ const Investor = ({ onBack }) => {
       field: "id",
       headerName: "ID",
       valueGetter: (params) => params.row.Users_PK,
-      minWidth: 150, // Explicit min width for ID 
+      minWidth: 150,
     },
     {
       field: "name",
@@ -148,7 +137,7 @@ const Investor = ({ onBack }) => {
       headerName: "Email",
       valueGetter: (params) => params.row.email,
       cellClassName: (params) => (params.row.active ? "" : "inactive"),
-      minWidth: 200, // Emails are usually longer, so we set a larger minWidth
+      minWidth: 200, 
       flex: 1,
     },
     {
@@ -156,7 +145,7 @@ const Investor = ({ onBack }) => {
       headerName: "Role",
       valueGetter: (params) => params.row.role,
       cellClassName: (params) => (params.row.active ? "" : "inactive"),
-      minWidth: 150, // Set width for roles
+      minWidth: 150, 
       flex: 1,
     },
     {
@@ -180,19 +169,19 @@ const Investor = ({ onBack }) => {
           </Button> */}
           <Button
             variant="contained"
-            color={params.row.active ? "success" : "error"}
+            color={params.row.isBlocked === "true" ? "error" : "success"}
             onClick={() => {
-              handleActiveToggle(params.row.Users_PK);
-              console.log(params.row.Users_PK)
-              deActivateUser(params.row.Users_PK)
+              // handleActiveToggle(params.row.Users_PK);
+              console.log("Helllo ", params.row.Users_PK, params.row.isBlocked);
+              deActivateUser(params.row.Users_PK, params.row.isBlocked);
             }}
           >
-            {params.row.active ? "Deactivate" : "Activate"}
+            {params.row.isBlocked === "true" ? "Activate" : "Deactivate"}
           </Button>
         </Box>
       ),
-      minWidth: 300, // Ensure enough space for all buttons
-      align: "center", // Center-align the actions
+      minWidth: 300,
+      align: "center",
     }
   ]
   // State to control the video modal visibility

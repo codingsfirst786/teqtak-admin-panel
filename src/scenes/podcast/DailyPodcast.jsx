@@ -1,64 +1,33 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { tokens } from "../../theme";
-import { useTheme, Box, Typography, Button, Card, CardContent, CardMedia, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
-import StatBox from "../../components/StatBox";
-import PodcastsIcon from '@mui/icons-material/Podcasts';
-import img2 from './img2.jpeg';
+import { useTheme, Box, Typography, Button, Card, CardMedia, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 import img3 from './img3.jpeg';
-import img4 from './img4.jpeg';
-import img5 from './img5.jpeg';
 import axios from "axios";
-import { fetchAllPodcastsCount } from "../../Api/Podcast/AllPodcastCount";
+import Header from "../../components/Header";
+import { fetchAllPodcastsCount } from '../../Api/Podcast/AllPodcastCount'
 
 
-const Podcast = () => {
+const DailyPodcast = () => {
   const navigate = useNavigate()
-  const [count, setCount] = useState(0);
   const [podcast, setPodcast] = useState([]);
-  const [dailyPodcastsCount, setDailyPodcastsCount] = useState(0)
-  const [monthlyPodcastsCount, setMonthlyPodcastsCount] = useState(0)
-  const [weeklyPodcastsCount, setWeeklyPodcastsCount] = useState(0)
 
-  // Fetch data from API
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/podcasts`);
-        const result = await response.data;
-        const updatedData = result.data.map(user => ({
-          ...user,
-          active: true,
-        }));
-        setCount(result.count);
-        setPodcast(updatedData);
-        console.log(updatedData);
-      } catch (error) {
-        console.error('Fetching data error', error);
-      }
+    const getPodcastCount = async () => {
+        try {
+            const users = await fetchAllPodcastsCount();
+            setPodcast(users.todayPodcast);
+
+        } catch (error) {
+            console.log(error);
+        }
     };
-    getData();
-  }, [process.env.REACT_APP_BACK_URL]);
-
-  // Get Count By Date 
-  useEffect(() => {
-    const getUserCount = async () => {
-      try {
-        const users = await fetchAllPodcastsCount();
-        setDailyPodcastsCount(users.count.daily);
-        setWeeklyPodcastsCount(users.count.weekly)
-        setMonthlyPodcastsCount(users.count.monthly)
-
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserCount();
-  }, []);
-
+    getPodcastCount();
+}, []);
   const { img } = useParams();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [open, setOpen] = useState(false); // State to control the modal
+  const [open, setOpen] = useState(false);
 
 
   const theme = useTheme();
@@ -66,14 +35,11 @@ const Podcast = () => {
 
   const handleDetailClick = (image) => {
     setSelectedImage(image);
-    setOpen(true); // Open the modal
+    setOpen(true);
   };
   const handleDeletePodact = async (podid) => {
     try {
-      // Make a DELETE request to the API to delete the video by ID
       await axios.delete(`${process.env.REACT_APP_BACK_URL}/podcasts/${podid}`);
-
-      // Remove the deleted video from the state
       setPodcast((prevpodcast) => prevpodcast.filter((podcast) => podcast._id !== podid));
 
     } catch (error) {
@@ -82,103 +48,32 @@ const Podcast = () => {
   };
 
   const handleClose = () => {
-    setOpen(false); // Close the modal
+    setOpen(false);
   };
-
-  const handleDailyPodcast = () => {
-    navigate('/dailyPodcast')
-  }
-  const handleWeeklyPodcast = () => {
-    navigate('/weeklyPodcats')
-  }
-  const handleMonthlyPodcast = () => {
-    navigate('/monthlyPodcast')
-  }
 
   return (
     <Fragment>
       <Box px={6} overflow="auto" position="relative" sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
-        {/* Stats */}
+        <IconButton onClick={() => navigate("/podcast")} sx={{ mb: 2 }}>
+          <ArrowBack />
+        </IconButton>
+
         <Box
           display="grid"
-          gridTemplateColumns="repeat(12, 1fr)"
+          gridTemplateColumns="repeat(6, 3fr)"
           gridAutoRows="140px"
           gap="20px"
         >
           <Box
-            gridColumn="span 3"
-            backgroundColor={colors.primary[400]}
             display="flex"
+            justifyContent="space-between"
             alignItems="center"
-            justifyContent="center"
-            onClick={handleDailyPodcast}
+            gridColumn="span 6"
           >
-            <StatBox
-              subtitle="Daily Podcast"
-              title={dailyPodcastsCount}
-              icon={
-                <PodcastsIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-          <Box
-            gridColumn="span 3"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            onClick={handleWeeklyPodcast}
-          >
-            <StatBox
-              title={weeklyPodcastsCount}
-              subtitle="Weekly Podcast"
-              icon={
-                <PodcastsIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-          <Box
-            gridColumn="span 3"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            onClick={handleMonthlyPodcast}
-          >
-            <StatBox
-              title={monthlyPodcastsCount}
-              subtitle="Monthly Podcast"
-              icon={
-                <PodcastsIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-          <Box
-            gridColumn="span 3"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <StatBox
-              title={count}
-              subtitle="Total Podcast"
-              icon={
-                <PodcastsIcon
-                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                />
-              }
-            />
+            <Header title="DAILY PODCAST" subtitle="Managing the Daily Podcast" />
           </Box>
         </Box>
 
-        {/* Similar Podcasts Section */}
         <Typography variant="h6" mt={4} mb={2} style={{ color: "#4CCEAC" }}>Similar Podcasts</Typography>
         <Box display="flex" flexWrap="wrap" gap={2}>
           {podcast.map((elm, ind) => (
@@ -193,9 +88,6 @@ const Podcast = () => {
                 <Typography variant="h4" style={{ color: "#4CCEAC" }}>{elm.episodeTitle}</Typography>
                 <Typography variant="h6">Type : {elm.podcastType}</Typography>
                 <Box display="flex" justifyContent="space-between">
-                  {/* <Typography variant="body2" display="flex" alignItems="center" gap={1}>
-                    {elm.user.name}
-                  </Typography> */}
                   <Button variant="contained" color="primary" onClick={() => handleDetailClick(elm)}>
                     Detail
                   </Button>
@@ -245,9 +137,9 @@ const Podcast = () => {
                   <Typography variant="body2" sx={{ my: "7px" }}>
                     Duration: {selectedImage.podcastDuration}
                   </Typography>
-                  {/* <Typography variant="h5" sx={{ my: "7px" }}>
+                  <Typography variant="h5" sx={{ my: "7px" }}>
                     Speaker: {selectedImage.speakers}
-                  </Typography> */}
+                  </Typography>
                   {/* <Typography variant="h6" style={{ color: "#4CCEAC" }} sx={{ mt: "20px" }}>
                     Publisher: {selectedImage.user.name}
                   </Typography> */}
@@ -267,4 +159,4 @@ const Podcast = () => {
   );
 };
 
-export default Podcast;
+export default DailyPodcast;

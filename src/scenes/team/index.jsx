@@ -17,11 +17,12 @@ import UserEvents from "../../components/UserEvents";
 import UserJobs from "../../components/UserJobs";
 import { fetchAllUserCount } from "../../Api/AllUser/AllUserCount.api";
 
-const Team = ({onBack, userId}) => {
+const Team = ({ onBack, userId }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [team, setTeam] = useState([]); 
-  const [selectedUser, setSelectedUser] = useState(null); 
+  const [team, setTeam] = useState([]);
+  
+  const [selectedUser, setSelectedUser] = useState(null);
   const [count, setCount] = useState(0)
   const [dailyUserCount, setDailyUserCount] = useState(0)
   const [monthlyUserCount, setMonthlyUserCount] = useState(0)
@@ -51,7 +52,7 @@ const Team = ({onBack, userId}) => {
           active: true
         }));
         setCount(result.count)
-        console.log("this is updated data",updatedData)
+        console.log("this is updated data", updatedData)
         setTeam(updatedData);
       } catch (error) {
         console.error('Fetching data error', error);
@@ -74,44 +75,55 @@ const Team = ({onBack, userId}) => {
 
 
   const handleViewProfileClick = (user) => {
-    setSelectedUser(user); 
+    setSelectedUser(user);
   };
 
-   const handleBackClick = () => {
-    setSelectedUser(null); 
+  const handleBackClick = () => {
+    setSelectedUser(null);
   };
 
- 
 
-  const deActivateUser = async (id) => {
-    const data = { "isBlocked": "false" }
-    console.log('deavtivating ', id)
-    const req = await fetch(`http://localhost:5000/users/update/${id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-   
-    const d = await req.json()
-    console.log("asdsdaadasdas",d)
-  }
 
-  const handleActiveToggle = (userId) => {
-    const updatedEntrepreneurData = team.map((user) =>
-      user.Users_PK === userId ? { ...user, active: !user.active } : user
-    );
-    setTeam(updatedEntrepreneurData);
-    if (selectedUser && selectedUser.Users_PK === userId) {
-      setSelectedUser({ ...selectedUser, active: !selectedUser.active });
+  const deActivateUser = async (id, currentStatus) => {
+    console.log(currentStatus, "currentStatus");
+    
+    const isBlocked = currentStatus === "true";
+    const updatedStatus = !isBlocked; 
+    const data = { "isBlocked": updatedStatus.toString() }; 
+  
+    console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
+  
+    try {
+      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+  
+      const response = await req.json();
+      console.log('Response:', response);
+  
+    } catch (error) {
+      console.error('Error updating user status:', error);
     }
   };
+  
+  // const handleActiveToggle = (userId) => {
+  //   const updatedEntrepreneurData = team.map((user) =>
+  //     user.Users_PK === userId ? { ...user, active: !user.active } : user
+  //   );
+  //   setTeam(updatedEntrepreneurData);
+  //   if (selectedUser && selectedUser.Users_PK === userId) {
+  //     setSelectedUser({ ...selectedUser, active: !selectedUser.active });
+  //   }
+  // };
 
   useEffect(() => {
     const getUserCount = async () => {
       try {
-        const users = await fetchAllUserCount(); 
+        const users = await fetchAllUserCount();
         setDailyUserCount(users.count.daily);
         setWeeklyUserCount(users.count.weekly)
         setMonthlyUserCount(users.count.monthly)
@@ -131,7 +143,6 @@ const Team = ({onBack, userId}) => {
         <Avatar alt={img} src={params.row.picUrl} />
       ),
     },
-    // { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK },
     {
       field: "name",
       headerName: "Name",
@@ -171,35 +182,34 @@ const Team = ({onBack, userId}) => {
           </Button>
           <Button
             variant="contained"
-            color={params.row.active ? "success" : "error"}
+            color={params.row.isBlocked === "true" ? "error" : "success"}
             onClick={() => {
-              handleActiveToggle(params.row.Users_PK);
-              console.log(params.row.Users_PK)
-              deActivateUser(params.row.Users_PK)
+              console.log("Helllo ",params.row.Users_PK, params.row.isBlocked);
+              deActivateUser(params.row.Users_PK, params.row.isBlocked); 
             }}
           >
-            {params.row.active ? "Deactivate" : "Activate"}
+            {params.row.isBlocked === "true" ? "Activate" : "Deactivate"}
           </Button>
         </Box>
       ),
     },
   ];
 
- // State to control the video modal visibility
- const [openVedioModal, setOpenVideoModal] = useState(false);
- const [openPodcastModal, setOpenPodcastModal] = useState(false);
- const [openEventsModal, setOpenEventsModal] = useState(false);
- const [openJobsModal, setOpenJobsModal] = useState(false);
+  // State to control the video modal visibility
+  const [openVedioModal, setOpenVideoModal] = useState(false);
+  const [openPodcastModal, setOpenPodcastModal] = useState(false);
+  const [openEventsModal, setOpenEventsModal] = useState(false);
+  const [openJobsModal, setOpenJobsModal] = useState(false);
 
- // Handler for modal
- const handleOpenVideoModal = () => setOpenVideoModal(true);
- const handleCloseVideoModal = () => setOpenVideoModal(false);
- const handleOpenPodcastModal = () => setOpenPodcastModal(true);
- const handleClosePodcastModal = () => setOpenPodcastModal(false);
- const handleOpenEventsModal = () => setOpenEventsModal(true);
- const handleCloseEventsModal = () => setOpenEventsModal(false);
- const handleOpenJobsModal = () => setOpenJobsModal(true);
- const handleCloseJobsModal = () => setOpenJobsModal(false);
+  // Handler for modal
+  const handleOpenVideoModal = () => setOpenVideoModal(true);
+  const handleCloseVideoModal = () => setOpenVideoModal(false);
+  const handleOpenPodcastModal = () => setOpenPodcastModal(true);
+  const handleClosePodcastModal = () => setOpenPodcastModal(false);
+  const handleOpenEventsModal = () => setOpenEventsModal(true);
+  const handleCloseEventsModal = () => setOpenEventsModal(false);
+  const handleOpenJobsModal = () => setOpenJobsModal(true);
+  const handleCloseJobsModal = () => setOpenJobsModal(false);
 
   if (selectedUser) {
     const textStyle = selectedUser.active
@@ -281,9 +291,9 @@ const Team = ({onBack, userId}) => {
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
-          <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" 
-          // onClick={handlepodcast}
-          onClick={handleOpenPodcastModal}
+          <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
+            // onClick={handlepodcast}
+            onClick={handleOpenPodcastModal}
           >
             <StatBox
               subtitle="Total Podcast"
@@ -324,7 +334,7 @@ const Team = ({onBack, userId}) => {
   }
 
   return (
-    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
+    <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Box>
         <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
           <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">

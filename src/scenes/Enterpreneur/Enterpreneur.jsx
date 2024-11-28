@@ -58,18 +58,6 @@ const Enterpreneur = ({ onBack }) => {
     getData();
   }, []);
 
-  const handleDelete = async (userId) => {
-
-    try {
-      const response = await axios.delete(`${process.env.REACT_APP_BACK_URL}/admin/${userId}`);
-      if (response.status === 200) {
-        console.log("User deleted successfully:", response.data);
-        // Optionally refresh the data or update the UI
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
 
   const DailyEnterpreneurHandle = () => {
     navigate('/dailyEnterpreneur');
@@ -84,40 +72,44 @@ const Enterpreneur = ({ onBack }) => {
   };
 
   const handleViewProfileClick = (user) => {
-    setSelectedUser(user); 
+    setSelectedUser(user);
   };
 
   const handleBackClick = () => {
     setSelectedUser(null)
   }
-  const handleActiveToggle = (userId) => {
-    const updatedEntrepreneurData = entrepreneur.map((user) =>
-      user.Users_PK === userId ? { ...user, active: !user.active } : user
-    );
-    setEntrepreneur(updatedEntrepreneurData);
-    if (selectedUser && selectedUser.Users_PK === userId) {
-      setSelectedUser({ ...selectedUser, active: !selectedUser.active });
+
+
+  const deActivateUser = async (id, currentStatus) => {
+    console.log(currentStatus, "currentStatus");
+
+    const isBlocked = currentStatus === "true";
+    const updatedStatus = !isBlocked;
+    const data = { "isBlocked": updatedStatus.toString() };
+
+    console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
+
+    try {
+      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      const response = await req.json();
+      console.log('Response:', response);
+
+    } catch (error) {
+      console.error('Error updating user status:', error);
     }
   };
-
-  const deActivateUser = async (id) => {
-    const data = { "isBlocked": "true" }
-    console.log('deavtivating ', id)
-    const req = await fetch(`http://localhost:5000/users/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json' // Set the correct content-type header
-      },
-      body: JSON.stringify(data)
-    })
-    const d = await req.json()
-    console.log({ d })
-  }
 
   useEffect(() => {
     const getUserCount = async () => {
       try {
-        const users = await fetchAllEnterpreneurCount(); 
+        const users = await fetchAllEnterpreneurCount();
         setDailyEnterpreneurCount(users.count.daily);
         setWeeklyEnterpreneurCount(users.count.weekly)
         setMonthlyEnterpreneurCount(users.count.monthly)
@@ -164,7 +156,7 @@ const Enterpreneur = ({ onBack }) => {
       renderCell: (params) => (
         <Box display="flex" gap="10px">
           <Button variant="contained" color="primary"
-           onClick={() => handleViewProfileClick(params.row)}>
+            onClick={() => handleViewProfileClick(params.row)}>
             Profile
           </Button>
           {/* <Button
@@ -176,11 +168,11 @@ const Enterpreneur = ({ onBack }) => {
           </Button> */}
           <Button
             variant="contained"
-            color={params.row.active ? "success" : "error"}
+            color={params.row.isBlocked === "true" ? "error" : "success"}
             onClick={() => {
-              handleActiveToggle(params.row.Users_PK);
-              console.log(params.row.Users_PK)
-              deActivateUser(params.row.Users_PK)
+              // handleActiveToggle(params.row.Users_PK);
+              console.log("Helllo ", params.row.Users_PK, params.row.isBlocked);
+              deActivateUser(params.row.Users_PK, params.row.isBlocked);
             }}
           >
             {params.row.active ? "Deactivate" : "Activate"}

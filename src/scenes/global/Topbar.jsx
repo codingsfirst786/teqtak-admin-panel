@@ -79,9 +79,9 @@ const Topbar = () => {
             <sup>{count}</sup>
           </Box>
         </IconButton>
-        <IconButton>
+        {/* <IconButton>
           <SettingsOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
         <Link to="/admin-profile">
           <IconButton>
             <PersonOutlinedIcon />
@@ -98,7 +98,7 @@ const Topbar = () => {
           sx={{
             position: 'absolute',
             top: '10%',
-            right: '10%',
+            right: '5%',
             width: 280,
             backgroundColor: colors.primary[400],
             boxShadow: 24,

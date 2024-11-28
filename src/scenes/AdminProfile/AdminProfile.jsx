@@ -33,23 +33,23 @@ const AdminProfile = () => {
                 <CardHeader style={{color:"#4CCEAC"}}
                   title="Jessica Jones"
                   subheader="Solution Manager - Creative Tim Officer"
-                  sx={{ textAlign: 'center', mt: 2 }}
+                  sx={{ textAlign: 'center', mt: 3 }}
                 />
-                <Typography variant="body2" color="text.secondary" align="center">
+                <Typography variant="body2" color="text.secondary" align="center" mt={2}>
                   Bucharest, Romania
                 </Typography>
-                <Typography variant="body2" color="text.secondary" align="center">
+                <Typography variant="body2" color="text.secondary" align="center" >
                   University of Computer Science
                 </Typography>
-                <Typography variant="body2" color="text.secondary" align="center" mt={2}>
+                <Typography variant="body2" color="text.secondary" align="center" mt={3}>
                   Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music.
                 </Typography>
-                <Button variant="contained" color="info" fullWidth sx={{ mt: 2 }}>
+                {/* <Button variant="contained" color="info" fullWidth sx={{ mt: 2 }}>
                   Connect
                 </Button>
                 <Button variant="contained" color="info" fullWidth sx={{ mt: 1 }} style={{background:"rgb(41,182,246)"}}>
                   Message
-                </Button>
+                </Button> */}
               </CardContent>
             </StyledCard>
           </Grid>
@@ -59,11 +59,11 @@ const AdminProfile = () => {
             <StyledCard style={{backgroundColor: colors.primary[400]}}>
               <CardHeader style={{color:"#4CCEAC"}}
                 title="My account"
-                action={
-                  <Button variant="contained" color="primary" size="small" style={{background:"rgb(41,182,246)"}}>
-                    Settings
-                  </Button>
-                }
+                // action={
+                //   <Button variant="contained" color="primary" size="small" style={{background:"rgb(41,182,246)"}}>
+                //     Settings
+                //   </Button>
+                // }
               />
               <CardContent>
                 <Typography variant="h6" gutterBottom style={{color:"#4CCEAC"}}>

@@ -12,7 +12,7 @@ import Videos from './scenes/Videos/index'
 import AdminProfile from './scenes/AdminProfile/AdminProfile'
 import GetJobs from "./scenes/GetJobs";
 import Line from "./scenes/line";
-import Pie from "./scenes/pie";
+import Pie from "./scenes/Setting";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
@@ -122,6 +122,11 @@ import Login from "./scenes/Singup/Login";
 import DailyVideos from "./scenes/Videos/DailyVideos";
 import WeeklyVideos from "./scenes/Videos/WeeklyVideos";
 import MonthlyVideos from "./scenes/Videos/MonthlyVideos";
+import DailyPodcast from "./scenes/podcast/DailyPodcast";
+import WeeklyPodcast from "./scenes/podcast/WeeklyPodcast";
+import MonthlyPodcast from "./scenes/podcast/MonthlyPodcast";
+import Reports from "./scenes/reports/Reports";
+import Setting from "./scenes/Setting";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -137,16 +142,15 @@ function App() {
         <div className="app">
           {location.pathname !== '/login' && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
-          {location.pathname !== '/login' && <Topbar isSidebar={isSidebar} />}
+            {location.pathname !== '/login' && <Topbar isSidebar={isSidebar} />}
             <Routes>
 
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<Dashboard />} />
 
               {/* Other Routes */}
-              <Route path="/podcast" element={<Podcast />} />
               <Route path="/admin-profile" element={<AdminProfile />} />
-              <Route path="/pie" element={<Pie />} />
+              <Route path="/setting" element={<Setting />} />
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/blockaccounts" element={<BlockAccount />} />
@@ -156,8 +160,14 @@ function App() {
               <Route path="/geography" element={<Geography />} />
               <Route path="/user" element={<InvestorTable />} />
               <Route path="/notification" element={<Notifications />} />
-              <Route path="/notificationUser" element={<NotificationUser />} />
+              <Route path="/notification" element={<Notifications />} />
+              <Route path="/report" element={<Reports />} />
 
+              {/* Podcats  */}
+              <Route path="/podcast" element={<Podcast />} />
+              <Route path="/dailyPodcast" element={<DailyPodcast />} />
+              <Route path="/weeklyPodcats" element={<WeeklyPodcast />} />
+              <Route path="/monthlyPodcast" element={<MonthlyPodcast />} />
               {/* Videos  */}
               <Route path="/videos" element={<Videos />} />
               <Route path="/dailyVideos" element={<DailyVideos />} />
@@ -166,7 +176,7 @@ function App() {
               {/* Events  */}
               <Route path="/events" element={<Events />} />
               <Route path="/dailyEvents" element={<DailyEvents />} />
-              <Route path="/weeklyEvents" element={<WeeklyEvents  />} />
+              <Route path="/weeklyEvents" element={<WeeklyEvents />} />
               <Route path="/monthlyEvents" element={<MonthlyEvents />} />
               {/* Jobs  */}
               <Route path="/jobs" element={<GetJobs />} />

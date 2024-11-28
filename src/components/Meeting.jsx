@@ -51,7 +51,7 @@ const Meeting = () => {
   const closeModal = () => setSelectedMeetingId(null);
 
   return (
-    <Box p={4}>
+    <Box p={4} sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       {meetings.map((meeting) => (
         <Box
           backgroundColor={colors.primary[400]}
