@@ -21,6 +21,7 @@ import UserPodcast from "../../components/UserPodcast";
 import UserEvents from "../../components/UserEvents";
 import UserJobs from "../../components/UserJobs";
 import { fetchAllInvestorsCount } from "../../Api/Investors/allInvestorCount.api";
+import { handleSubAdmin } from "../../Api/AllUser/SubAdmin";
 
 
 const Investor = ({ onBack }) => {
@@ -32,6 +33,8 @@ const Investor = ({ onBack }) => {
   const [dailyInvestorCount, setDailyInvestorCount] = useState(0);
   const [weeklyInvestorCount, setWeeklyInvestorCount] = useState(0);
   const [monthlyInvestorCount, setMonthlyInvestorCount] = useState(0);
+  const [refresh, setRefresh] = useState(false)
+
   const navigate = useNavigate()
 
   const DailyInvestorHandle = () => {
@@ -83,7 +86,7 @@ const Investor = ({ onBack }) => {
       }
     }
     getData();
-  }, [])
+  }, [refresh])
 
 
   const deActivateUser = async (id, currentStatus) => {
@@ -96,7 +99,7 @@ const Investor = ({ onBack }) => {
     console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
 
     try {
-      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+      const req = await fetch(`${process.env.REACT_APP_BACK_URL}/users/update/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -106,6 +109,7 @@ const Investor = ({ onBack }) => {
 
       const response = await req.json();
       console.log('Response:', response);
+      setRefresh(!refresh)
 
     } catch (error) {
       console.error('Error updating user status:', error);
@@ -115,6 +119,7 @@ const Investor = ({ onBack }) => {
   const handleBackClick = () => {
     setSelectedUser(null)
   }
+
 
   const columns = [
     {
@@ -163,15 +168,14 @@ const Investor = ({ onBack }) => {
           {/* <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row.Users_PK)} 
+          onClick={() => onSubAdminClick(params.row.Users_PK)}
           >
-            Delete
+            Sub-Admin
           </Button> */}
           <Button
             variant="contained"
             color={params.row.isBlocked === "true" ? "error" : "success"}
             onClick={() => {
-              // handleActiveToggle(params.row.Users_PK);
               console.log("Helllo ", params.row.Users_PK, params.row.isBlocked);
               deActivateUser(params.row.Users_PK, params.row.isBlocked);
             }}
@@ -184,12 +188,19 @@ const Investor = ({ onBack }) => {
       align: "center",
     }
   ]
-  // State to control the video modal visibility
   const [openVedioModal, setOpenVideoModal] = useState(false);
   const [openPodcastModal, setOpenPodcastModal] = useState(false);
   const [openEventsModal, setOpenEventsModal] = useState(false);
   const [openJobsModal, setOpenJobsModal] = useState(false);
-
+  const [userDataJobsCount, setUserDataJobsCount] = useState(0);
+  const [userDataVideoCount, setUserDataVideoCount] = useState(0);
+  const [userDataPodcastCount, setUserDataPodcastCount] = useState(0);
+  const [userDataEventCount, setUserDataEventCount] = useState(0);
+  const [userDataJobs, setUserDataJobs] = useState([]);
+  const [userDataVideo, setUserDataVideo] = useState([]);
+  const [userDataPodcast, setUserDataPodcast] = useState([]);
+  const [userDataEvent, setUserDataEvent] = useState([]);
+  
   // Handler for modal
   const handleOpenVideoModal = () => setOpenVideoModal(true);
   const handleCloseVideoModal = () => setOpenVideoModal(false);
@@ -200,49 +211,43 @@ const Investor = ({ onBack }) => {
   const handleOpenJobsModal = () => setOpenJobsModal(true);
   const handleCloseJobsModal = () => setOpenJobsModal(false);
 
-  const handlepodcast = () => {
-    navigate('/dailyenterpreneurpodcast')
-  }
-  const handlevideo = () => {
-    navigate('/dailyenterpreneurvideo')
-  }
-  const handlejobs = () => {
-    navigate('/dailyenterpreneurjobs')
-  }
-  const handleevents = () => {
-    navigate('/dailyenterpreneurevents')
-  }
+  useEffect(() => {
+    if (selectedUser) {
+      const fetchUserDataCount = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACK_URL}/users/${selectedUser.Users_PK}`
+          );
+          const jobsData = response.data.data.jobs; 
+          const podcastData = response.data.data.podcast; 
+          const eventData = response.data.data.events; 
+          const videoData = response.data.data.videos; 
+          setUserDataJobsCount(jobsData); 
+          setUserDataEventCount(eventData); 
+          setUserDataPodcastCount(podcastData); 
+          setUserDataVideoCount(videoData); 
+          setUserDataJobs(jobsData)
+          setUserDataEvent(eventData)
+          setUserDataPodcast(podcastData)
+          setUserDataVideo(videoData)
+          console.log(response.data, "Hello Selected user data count"); 
+        } catch (error) {
+          console.error("Error fetching user data count:", error);
+        }
+      };
+  
+      fetchUserDataCount();
+    }
+  }, [selectedUser]);
+
 
   if (selectedUser) {
+
     const textStyle = selectedUser.active
       ? {}
       : { color: 'red', filter: 'blur(2px)', textDecoration: 'line-through' };
 
-    // Render the selected user's profile
     return (
-      // <Box m="40px 0" display="flex" flexDirection="column" alignItems="center">
-      //   <Box sx={{ width: '50%', padding: '20px', backgroundColor: colors.primary[400], textAlign: 'center' }}>
-      //     <ArrowBackIcon onClick={handleBackClick} sx={{ cursor: 'pointer', fontSize: '2rem', mb: 2 }} />
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       ID: {selectedUser.Users_PK}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Name: {selectedUser.name}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Password: {selectedUser.password}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Email: {selectedUser.email}
-      //     </Typography>
-      //     <Typography variant="body1" color={colors.grey[100]} gutterBottom sx={{ margin: '8px', ...textStyle }}>
-      //       Role: {selectedUser.role}
-      //     </Typography>
-      //     <Button variant="contained" color={selectedUser.active ? 'success' : 'error'} onClick={() => handleActiveToggle(selectedUser.Users_PK)}>
-      //       {selectedUser.active ? 'Deactivate' : 'Activate'}
-      //     </Button>
-      //   </Box>
-      // </Box>
       <Box m="40px 0" display="flex" flexDirection="column" alignItems="center" >
 
         <Box
@@ -315,7 +320,7 @@ const Investor = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Jobs"
-              title="40"
+              title={userDataJobsCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -325,7 +330,7 @@ const Investor = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Podcast"
-              title="25"
+              title={userDataPodcastCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -335,13 +340,11 @@ const Investor = ({ onBack }) => {
             alignItems="center"
             justifyContent="center"
             boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)"
-            // onClick={handledailyviewer}
-            // onClick={handlevideo}
             onClick={handleOpenVideoModal}
           >
             <StatBox
               subtitle="Total Video"
-              title="22"
+              title={userDataVideoCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -350,15 +353,15 @@ const Investor = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Events"
-              title="19"
+              title={userDataEventCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
         </Box>
-        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} userId={selectedUser.Users_PK} />
-        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} userId={selectedUser.Users_PK} />
-        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} userId={selectedUser.Users_PK} />
-        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} userId={selectedUser.Users_PK} />
+        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} data={userDataVideo} />
+        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} data={userDataEvent} />
+        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} data={userDataPodcast} />
+        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} data={userDataJobs} />
       </Box>
     );
   }
@@ -369,9 +372,6 @@ const Investor = ({ onBack }) => {
         <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
           <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">
             <Header title="TOTAL INVESTOR" subtitle="Managing the All Investor" />
-            {/* <Button variant="contained" color="primary">
-              DELETE INVESTOR
-            </Button> */}
           </Box>
         </Box>
         <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">

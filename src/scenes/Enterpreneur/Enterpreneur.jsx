@@ -15,6 +15,7 @@ import UserPodcast from "../../components/UserPodcast";
 import UserEvents from "../../components/UserEvents";
 import UserJobs from "../../components/UserJobs";
 import { fetchAllEnterpreneurCount } from "../../Api/Enterpreneurs/AllEnterpreneurCount.api";
+import { handleSubAdmin } from "../../Api/AllUser/SubAdmin";
 
 const Enterpreneur = ({ onBack }) => {
   const theme = useTheme();
@@ -24,6 +25,7 @@ const Enterpreneur = ({ onBack }) => {
   const [dailyEnterpreneurCount, setDailyEnterpreneurCount] = useState(0)
   const [monthlyEnterpreneurCount, setMonthlyEnterpreneurCount] = useState(0)
   const [weeklyEnterpreneurCount, setWeeklyEnterpreneurCount] = useState(0)
+  const [refresh, setRefresh] = useState(false)
   const [count, setCount] = useState(0)
   const navigate = useNavigate();
 
@@ -56,7 +58,7 @@ const Enterpreneur = ({ onBack }) => {
       }
     };
     getData();
-  }, []);
+  }, [refresh]);
 
 
   const DailyEnterpreneurHandle = () => {
@@ -100,6 +102,7 @@ const Enterpreneur = ({ onBack }) => {
 
       const response = await req.json();
       console.log('Response:', response);
+      setRefresh(!refresh)
 
     } catch (error) {
       console.error('Error updating user status:', error);
@@ -119,6 +122,17 @@ const Enterpreneur = ({ onBack }) => {
     };
     getUserCount();
   }, []);
+
+
+  // handle Sub Admin 
+  // const onSubAdminClick = async (userId) => {
+  //   try {
+  //     const result = await handleSubAdmin(userId);
+  //     console.log("Sub-admin created:", result);
+  //   } catch (error) {
+  //     console.error("Failed to create sub-admin:", error.message);
+  //   }
+  // };
 
   const columns = [
     { field: "id", headerName: "ID", valueGetter: (params) => params.row.Users_PK, minWidth: 150 },
@@ -162,9 +176,9 @@ const Enterpreneur = ({ onBack }) => {
           {/* <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row.Users_PK)}  // Pass dynamic ID here
-          >
-            Delete
+            onClick={() => onSubAdminClick(params.row.Users_PK)}
+            >
+            Sub-Admin
           </Button> */}
           <Button
             variant="contained"
@@ -190,6 +204,14 @@ const Enterpreneur = ({ onBack }) => {
   const [openPodcastModal, setOpenPodcastModal] = useState(false);
   const [openEventsModal, setOpenEventsModal] = useState(false);
   const [openJobsModal, setOpenJobsModal] = useState(false);
+  const [userDataJobsCount, setUserDataJobsCount] = useState(0);
+  const [userDataVideoCount, setUserDataVideoCount] = useState(0);
+  const [userDataPodcastCount, setUserDataPodcastCount] = useState(0);
+  const [userDataEventCount, setUserDataEventCount] = useState(0);
+  const [userDataJobs, setUserDataJobs] = useState([]);
+  const [userDataVideo, setUserDataVideo] = useState([]);
+  const [userDataPodcast, setUserDataPodcast] = useState([]);
+  const [userDataEvent, setUserDataEvent] = useState([]);
 
   // Handler for modal
   const handleOpenVideoModal = () => setOpenVideoModal(true);
@@ -200,6 +222,35 @@ const Enterpreneur = ({ onBack }) => {
   const handleCloseEventsModal = () => setOpenEventsModal(false);
   const handleOpenJobsModal = () => setOpenJobsModal(true);
   const handleCloseJobsModal = () => setOpenJobsModal(false);
+
+  useEffect(() => {
+    if (selectedUser) {
+      const fetchUserDataCount = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACK_URL}/users/${selectedUser.Users_PK}`
+          );
+          const jobsData = response.data.data.jobs; 
+          const podcastData = response.data.data.podcast; 
+          const eventData = response.data.data.events; 
+          const videoData = response.data.data.videos; 
+          setUserDataJobsCount(jobsData); 
+          setUserDataEventCount(eventData); 
+          setUserDataPodcastCount(podcastData); 
+          setUserDataVideoCount(videoData); 
+          setUserDataJobs(jobsData)
+          setUserDataEvent(eventData)
+          setUserDataPodcast(podcastData)
+          setUserDataVideo(videoData)
+          console.log(response.data, "Hello Selected user data count"); 
+        } catch (error) {
+          console.error("Error fetching user data count:", error);
+        }
+      };
+  
+      fetchUserDataCount();
+    }
+  }, [selectedUser]);
 
   if (selectedUser) {
     const textStyle = selectedUser.active
@@ -304,7 +355,7 @@ const Enterpreneur = ({ onBack }) => {
           <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" padding="30px 5px" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenJobsModal}>
             <StatBox
               subtitle="Total Jobs"
-              title="40"
+              title={userDataJobsCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -314,7 +365,7 @@ const Enterpreneur = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Podcast"
-              title="25"
+              title={userDataPodcastCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -328,22 +379,22 @@ const Enterpreneur = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Video"
-              title="22"
+              title={userDataVideoCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenEventsModal}>
             <StatBox
               subtitle="Total Events"
-              title="19"
+              title={userDataEventCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
         </Box>
-        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} userId={selectedUser.Users_PK} />
-        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} userId={selectedUser.Users_PK} />
-        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} userId={selectedUser.Users_PK} />
-        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} userId={selectedUser.Users_PK} />
+        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} data={userDataVideo} />
+        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} data={userDataEvent} />
+        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} data={userDataPodcast} />
+        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} data={userDataJobs} />
       </Box>
     );
   }

@@ -10,8 +10,8 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PodcastsIcon from '@mui/icons-material/Podcasts';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -253,10 +253,20 @@ const Sidebar = () => {
               active={selected === "Profile"}
               style={{ color: colors.grey[100] }}
               onClick={() => setSelected("Profile")}
-              icon={<PersonOutlinedIcon />}
+              icon={<AdminPanelSettingsOutlinedIcon />}
             >
               <Typography>Profile</Typography>
               <Link to="/admin-profile" />
+            </MenuItem>
+
+            <MenuItem
+              active={selected === "SUBADMIN"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("SUBADMIN")}
+              icon={<PersonAddIcon />}
+            >
+              <Typography>Sub Admin</Typography>
+              <Link to="/subadmin" />
             </MenuItem>
 
             {/* <MenuItem

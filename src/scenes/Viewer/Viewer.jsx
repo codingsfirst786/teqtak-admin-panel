@@ -14,6 +14,7 @@ import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { fetchAllViewersCount } from "../../Api/Viewers/AllviewerCount.api";
+import { handleSubAdmin } from "../../Api/AllUser/SubAdmin";
 
 const Viewer = ({ onBack }) => {
   const theme = useTheme();
@@ -51,6 +52,14 @@ const Viewer = ({ onBack }) => {
   const [openPodcastModal, setOpenPodcastModal] = useState(false);
   const [openEventsModal, setOpenEventsModal] = useState(false);
   const [openJobsModal, setOpenJobsModal] = useState(false);
+  const [userDataJobsCount, setUserDataJobsCount] = useState(0);
+  const [userDataVideoCount, setUserDataVideoCount] = useState(0);
+  const [userDataPodcastCount, setUserDataPodcastCount] = useState(0);
+  const [userDataEventCount, setUserDataEventCount] = useState(0);
+  const [userDataJobs, setUserDataJobs] = useState([]);
+  const [userDataVideo, setUserDataVideo] = useState([]);
+  const [userDataPodcast, setUserDataPodcast] = useState([]);
+  const [userDataEvent, setUserDataEvent] = useState([]);
 
   // Handler for modal
   const handleOpenVideoModal = () => setOpenVideoModal(true);
@@ -68,6 +77,8 @@ const Viewer = ({ onBack }) => {
   const [dailyViewerCount, setDailyViewerCount] = useState(0)
   const [monthlyViewerCount, setMonthlyViewerCount] = useState(0)
   const [weeklyViewerCount, setWeeklyViewerCount] = useState(0)
+  const [refresh, setRefresh] = useState(false)
+
 
   useEffect(() => {
     const getData = async () => {
@@ -91,23 +102,9 @@ const Viewer = ({ onBack }) => {
       }
     }
     getData();
-  }, [])
+  }, [refresh])
 
-  const handleDelete = async (userId) => {
-
-    try {
-      // Sending DELETE request
-      const response = await axios.delete(`${process.env.REACT_APP_BACK_URL}/admin/${userId}`);
-      if (response.status === 200) {
-        console.log("User deleted successfully:", response.data);
-        // Optionally refresh the data or update the UI
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-
-
+  // Handle Diactivate User 
   const deActivateUser = async (id, currentStatus) => {
     console.log(currentStatus, "currentStatus");
 
@@ -128,6 +125,7 @@ const Viewer = ({ onBack }) => {
 
       const response = await req.json();
       console.log('Response:', response);
+      setRefresh(!refresh)
 
     } catch (error) {
       console.error('Error updating user status:', error);
@@ -138,6 +136,7 @@ const Viewer = ({ onBack }) => {
     setSelectedUser(null)
   }
 
+  // Get Count By Day 
   useEffect(() => {
     const getUserCount = async () => {
       try {
@@ -151,6 +150,16 @@ const Viewer = ({ onBack }) => {
     };
     getUserCount();
   }, []);
+
+  // handle Sub Admin 
+  // const onSubAdminClick = async (userId) => {
+  //   try {
+  //     const result = await handleSubAdmin(userId);
+  //     console.log("Sub-admin created:", result);
+  //   } catch (error) {
+  //     console.error("Failed to create sub-admin:", error.message);
+  //   }
+  // };
 
   // /////////////////////////////////////////////  //
   const columns = [
@@ -194,9 +203,9 @@ const Viewer = ({ onBack }) => {
           {/* <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleDelete(params.row.Users_PK)}  // Pass dynamic ID here
+            onClick={() => onSubAdminClick(params.row.Users_PK)}
           >
-            Delete
+            Sub-Admin
           </Button> */}
           <Button
             variant="contained"
@@ -214,6 +223,35 @@ const Viewer = ({ onBack }) => {
       align: "center",
     },
   ];
+
+  useEffect(() => {
+    if (selectedUser) {
+      const fetchUserDataCount = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACK_URL}/users/${selectedUser.Users_PK}`
+          );
+          const jobsData = response.data.data.jobs; 
+          const podcastData = response.data.data.podcast; 
+          const eventData = response.data.data.events; 
+          const videoData = response.data.data.videos; 
+          setUserDataJobsCount(jobsData); 
+          setUserDataEventCount(eventData); 
+          setUserDataPodcastCount(podcastData); 
+          setUserDataVideoCount(videoData); 
+          setUserDataJobs(jobsData)
+          setUserDataEvent(eventData)
+          setUserDataPodcast(podcastData)
+          setUserDataVideo(videoData)
+          console.log(response.data, "Hello Selected user data count"); 
+        } catch (error) {
+          console.error("Error fetching user data count:", error);
+        }
+      };
+  
+      fetchUserDataCount();
+    }
+  }, [selectedUser]);
 
   if (selectedUser) {
     const textStyle = selectedUser.active
@@ -292,7 +330,7 @@ const Viewer = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Jobs"
-              title={userCount}
+              title={userDataJobsCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -301,7 +339,7 @@ const Viewer = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Podcast"
-              title={userCount}
+              title={userDataPodcastCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -316,7 +354,7 @@ const Viewer = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Video"
-              title={userCount}
+              title={userDataVideoCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -325,15 +363,15 @@ const Viewer = ({ onBack }) => {
           >
             <StatBox
               subtitle="Total Events"
-              title={userCount}
+              title={userDataEventCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
         </Box>
-        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} userId={selectedUser.Users_PK} />
-        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} userId={selectedUser.Users_PK} />
-        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} userId={selectedUser.Users_PK} />
-        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} userId={selectedUser.Users_PK} />
+        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} data={userDataVideo} />
+        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} data={userDataEvent} />
+        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} data={userDataPodcast} />
+        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} data={userDataJobs} />
       </Box>
     );
   }

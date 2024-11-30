@@ -4,33 +4,10 @@ import axios from "axios";
 import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from "@emotion/react";
 import { tokens } from "../theme";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const UserJobs = ({ open, handleClose, userId }) => {
+const UserJobs = ({ open, handleClose, data }) => {
 
-  const [myjobs, setMyJobs] = useState([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
-
-        const job = await response.data.data.jobs;
-        const jobLength = await response.data.data.jobs.length;
-        console.log("jobLength", jobLength)
-
-        console.log(job)
-        setMyJobs(job)
-
-      } catch (err) {
-        console.error("Testing Error is ", err);
-      }
-    };
-
-    if (userId) {
-      getData();
-    }
-  }, [userId]);
+  console.log(data, "Jobs =========================================")
  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -67,9 +44,9 @@ const UserJobs = ({ open, handleClose, userId }) => {
           display="grid"
           gridTemplateColumns="repeat(2, 1fr)"
           gap={2}
-          height="calc(100% - 48px)" // Subtract header height
+          height="calc(100% - 48px)" 
         >
-          {myjobs.map((job, index) => (
+          {data.map((job, index) => (
             <Box
               key={job._id}
               height="auto"

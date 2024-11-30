@@ -9,7 +9,7 @@ import Meeting from './components/Meeting'
 import Podcast from "./scenes/podcast";
 import Videos from './scenes/Videos/index'
 // import Bar from "./scenes/AdminProfile";
-import AdminProfile from './scenes/AdminProfile/AdminProfile'
+import AdminProfile from "./scenes/Admin/AdminProfile";
 import GetJobs from "./scenes/GetJobs";
 import Line from "./scenes/line";
 import Pie from "./scenes/Setting";
@@ -111,7 +111,6 @@ import MonthlyViewerEvents from "./scenes/AllEvents/ViewerEvents/MonthlyViewerEv
 import TotalViewerEvents from "./scenes/AllEvents/ViewerEvents/TotalViewerEvents";
 import WeeklyViewerEvents from "./scenes/AllEvents/ViewerEvents/WeeklyViewerEvents";
 import AddQuestion from "./scenes/question/AddQuestion";
-import Signup from "./scenes/Singup/Login";
 import DailyJobs from "./scenes/GetJobs/DailyJobs";
 import WeeklyJobs from "./scenes/GetJobs/WeeklyJobs";
 import MonthlyJobs from "./scenes/GetJobs/MonthlyJobs";
@@ -127,6 +126,7 @@ import WeeklyPodcast from "./scenes/podcast/WeeklyPodcast";
 import MonthlyPodcast from "./scenes/podcast/MonthlyPodcast";
 import Reports from "./scenes/reports/Reports";
 import Setting from "./scenes/Setting";
+import SubAdmin from "./scenes/Admin/SubAdmin";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -149,7 +149,6 @@ function App() {
               <Route path="/" element={<Dashboard />} />
 
               {/* Other Routes */}
-              <Route path="/admin-profile" element={<AdminProfile />} />
               <Route path="/setting" element={<Setting />} />
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
@@ -162,6 +161,9 @@ function App() {
               <Route path="/notification" element={<Notifications />} />
               <Route path="/notification" element={<Notifications />} />
               <Route path="/report" element={<Reports />} />
+              {/* Admin Route */}
+              <Route path="/admin-profile" element={<AdminProfile />} />
+              <Route path="/subadmin" element={<SubAdmin />} />
 
               {/* Podcats  */}
               <Route path="/podcast" element={<Podcast />} />

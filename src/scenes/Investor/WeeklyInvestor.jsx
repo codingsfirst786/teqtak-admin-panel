@@ -65,7 +65,9 @@ const WeeklyInvestor = () => {
           </TableHead>
           <TableBody>
             {dailyUser.map((user, index) => (
-              <TableRow key={index} onClick={() => handleProfileClick(user)} style={{ cursor: 'pointer' }}>
+              <TableRow key={index} 
+              // onClick={() => handleProfileClick(user)}
+               style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />
                   {/* <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} /> */}

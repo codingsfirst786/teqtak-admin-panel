@@ -12,7 +12,6 @@ import {
     Button
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { tokens } from "../theme";
 import img1 from '../scenes/podcast/image1.jpeg'
 import img2 from '../scenes/podcast/img2.jpeg'
@@ -21,41 +20,34 @@ import img4 from '../scenes/podcast/img4.jpeg'
 import img5 from '../scenes/podcast/img5.jpeg'
 import axios from "axios";
 
-// Data for the podcasts
-const podcasts = [
-    { img: img1, id: 1, categ: "Politics", userName: "Lily Williams", mint: '35 Mins', title: "Podcast 1" },
-    { img: img2, id: 2, categ: "Politics", userName: "Lily Williams", mint: '35 Mins', title: "Podcast 2" },
-    { img: img3, id: 3, categ: "Politics", userName: "Lily Williams", mint: '35 Mins', title: "Podcast 3" },
-    { img: img4, id: 4, categ: "Politics", userName: "Lily Williams", mint: '35 Mins', title: "Podcast 4" },
-    { img: img5, id: 5, categ: "Politics", userName: "Lily Williams", mint: '35 Mins', title: "Podcast 5" },
-];
 
-const UserPodcast = ({ open, handleClose, userId }) => {
+const UserPodcast = ({ open, handleClose, data }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [myPodcast, setMyPodcast] = useState([]);
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
+    // useEffect(() => {
+    //     const getData = async () => {
+    //         try {
+    //             const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
 
-                const podcast = await response.data.data.podcast;
-                const podcastLength = await response.data.data.podcast.length;
-                console.log("videoLength", podcastLength)
+    //             const podcast = await response.data.data.podcast;
+    //             const podcastLength = await response.data.data.podcast.length;
+    //             console.log("videoLength", podcastLength)
 
-                console.log("My Single user Podcast is ", podcast)
-                setMyPodcast(podcast)
+    //             console.log("My Single user Podcast is ", podcast)
+    //             setMyPodcast(podcast)
 
-            } catch (err) {
-                console.error("Testing Error is ", err);
-            }
-        };
+    //         } catch (err) {
+    //             console.error("Testing Error is ", err);
+    //         }
+    //     };
 
-        if (userId) {
-            getData();
-        }
-    }, [userId]);
+    //     if (userId) {
+    //         getData();
+    //     }
+    // }, [userId]);
+    console.log(data, '========================================')
     return (
         <Modal open={open} onClose={handleClose}>
             <Box
@@ -84,7 +76,7 @@ const UserPodcast = ({ open, handleClose, userId }) => {
                 </Box>
 
                 <Grid container spacing={2} justifyContent="center">
-                    {myPodcast.map((podcast) => (
+                    {data.map((podcast) => (
                         <Grid item xs={12} sm={6} key={podcast._id}>
                             <Card
                                 sx={{

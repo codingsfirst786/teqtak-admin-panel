@@ -7,42 +7,46 @@ import axios from "axios";
 import { useTheme } from "@emotion/react";
 import { tokens } from "../theme";
 
-const UserEvents = ({ open, handleClose, userId }) => {
+const UserEvents = ({ open, handleClose, data }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  console.log(data, "===== Hello hey")
 
   const [myevents, setMyEvents] = useState([]);
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
 
-        const events = await response.data.data.events;
-        const eventsLength = await response.data.data.events.length;
-        console.log("EventsLength", eventsLength)
+  //       const events = await response.data.data.events;
+  //       const eventsLength = await response.data.data.events.length;
+  //       console.log("EventsLength", eventsLength)
 
-        console.log("evnte is ", events)
-        setMyEvents(events)
+  //       console.log("evnte is ", events)
+  //       setMyEvents(events)
 
-      } catch (err) {
-        console.error("Testing Error is ", err);
-      }
-    };
+  //     } catch (err) {
+  //       console.error("Testing Error is ", err);
+  //     }
+  //   };
 
-    if (userId) {
-      getData();
-    }
-  }, [userId]);
+  //   if (userId) {
+  //     getData();
+  //   }
+  // }, [userId]);
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box
         backgroundColor={colors.primary[400]}
         sx={{
-          width: '55vw', height: '65vh', p: 4,
-          m: 'auto', position: 'relative', top: '50%', overflowY: "auto", transform: 'translateY(-50%)', borderRadius: 2,
+          width: '50%', height: '60vh', p: 4, position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)', overflowY: "auto",  borderRadius: 2, display: 'flex',
+          flexDirection: 'column',
         }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
           <Typography variant="h5" fontWeight="bold">
@@ -54,7 +58,7 @@ const UserEvents = ({ open, handleClose, userId }) => {
         </Box>
 
         <Grid container sx={{ flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          {myevents.map((event, i) => (
+          {data.map((event, i) => (
             <Grid item key={event._id} sx={{ width: '48%', position: 'relative', minHeight: '45vh', margin: "10px" }}>
               <CardMedia
                 component="img"

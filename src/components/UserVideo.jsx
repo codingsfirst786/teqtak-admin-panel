@@ -12,43 +12,15 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { tokens } from "../theme";
-import axios from "axios";
 
-// Data for the Videos
-const videos = [
-  { id: 1, src: "./video1.mp4" },
-  { id: 2, src: "./video2.mp4" },
-  { id: 3, src: "./video3.mp4" }
-];
 
-const UserVideo = ({ open, handleClose, userId }) => {
-
-  const [myVideo, setMyVideo] = useState([])
+const UserVideo = ({ open, handleClose, data }) => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/users/${userId}`);
-
-        const video = await response.data.data.videos;
-        const videoLength = await response.data.data.videos.length;
-        console.log("videoLength", videoLength)
-
-        setMyVideo(video)
-
-      } catch (err) {
-        console.error("Testing Error is ", err);
-      }
-    };
-
-    if (userId) {
-      getData();
-    }
-  }, [userId]);
+  const myvideo = data.map((e) => e.data)
+ 
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -69,7 +41,7 @@ const UserVideo = ({ open, handleClose, userId }) => {
 
         {/* Videos Grid */}
         <Grid container spacing={2} justifyContent="center">
-          {myVideo.map((video, ind) => (
+          {myvideo.map((video, ind) => (
             <Grid item xs={12} sm={6} key={ind}>
               <Card sx={{ position: 'relative', height: { xs: '30vh', sm: '37vh' }, cursor: 'pointer' }}>
                 <CardActionArea sx={{ height: '100%' }}>
@@ -80,7 +52,6 @@ const UserVideo = ({ open, handleClose, userId }) => {
                     controls
                   />
                   <IconButton sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', color: 'white' }}>
-                    {/* <PlayCircleOutlineIcon sx={{ fontSize: '2rem' }} /> */}
                   </IconButton>
                 </CardActionArea>
               </Card>

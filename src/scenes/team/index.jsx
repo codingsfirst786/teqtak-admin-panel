@@ -27,6 +27,7 @@ const Team = ({ onBack, userId }) => {
   const [dailyUserCount, setDailyUserCount] = useState(0)
   const [monthlyUserCount, setMonthlyUserCount] = useState(0)
   const [weeklyUserCount, setWeeklyUserCount] = useState(0)
+  const [refresh, setRefresh] = useState(false)
   const navigate = useNavigate();
 
 
@@ -59,7 +60,7 @@ const Team = ({ onBack, userId }) => {
       }
     };
     getData();
-  }, []);
+  }, [refresh]);
 
   const DailyUserHandle = () => {
     navigate('/dailyuser');
@@ -94,7 +95,7 @@ const Team = ({ onBack, userId }) => {
     console.log('Toggling block status for user ID:', id, 'New Status:', updatedStatus);
   
     try {
-      const req = await fetch(`http://localhost:5000/users/update/${id}`, {
+      const req = await fetch(`${process.env.REACT_APP_BACK_URL}/users/update/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -104,21 +105,12 @@ const Team = ({ onBack, userId }) => {
   
       const response = await req.json();
       console.log('Response:', response);
+      setRefresh(!refresh)
   
     } catch (error) {
       console.error('Error updating user status:', error);
     }
   };
-  
-  // const handleActiveToggle = (userId) => {
-  //   const updatedEntrepreneurData = team.map((user) =>
-  //     user.Users_PK === userId ? { ...user, active: !user.active } : user
-  //   );
-  //   setTeam(updatedEntrepreneurData);
-  //   if (selectedUser && selectedUser.Users_PK === userId) {
-  //     setSelectedUser({ ...selectedUser, active: !selectedUser.active });
-  //   }
-  // };
 
   useEffect(() => {
     const getUserCount = async () => {
@@ -200,6 +192,14 @@ const Team = ({ onBack, userId }) => {
   const [openPodcastModal, setOpenPodcastModal] = useState(false);
   const [openEventsModal, setOpenEventsModal] = useState(false);
   const [openJobsModal, setOpenJobsModal] = useState(false);
+  const [userDataJobsCount, setUserDataJobsCount] = useState(0);
+  const [userDataVideoCount, setUserDataVideoCount] = useState(0);
+  const [userDataPodcastCount, setUserDataPodcastCount] = useState(0);
+  const [userDataEventCount, setUserDataEventCount] = useState(0);
+  const [userDataJobs, setUserDataJobs] = useState([]);
+  const [userDataVideo, setUserDataVideo] = useState([]);
+  const [userDataPodcast, setUserDataPodcast] = useState([]);
+  const [userDataEvent, setUserDataEvent] = useState([]);
 
   // Handler for modal
   const handleOpenVideoModal = () => setOpenVideoModal(true);
@@ -210,6 +210,37 @@ const Team = ({ onBack, userId }) => {
   const handleCloseEventsModal = () => setOpenEventsModal(false);
   const handleOpenJobsModal = () => setOpenJobsModal(true);
   const handleCloseJobsModal = () => setOpenJobsModal(false);
+
+  useEffect(() => {
+    if (selectedUser) {
+      const fetchUserDataCount = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_BACK_URL}/users/${selectedUser.Users_PK}`
+          );
+          const jobsData = response.data.data.jobs; 
+          const podcastData = response.data.data.podcast; 
+          const eventData = response.data.data.events; 
+          const videoData = response.data.data.videos; 
+          setUserDataJobsCount(jobsData); 
+          setUserDataEventCount(eventData); 
+          setUserDataPodcastCount(podcastData); 
+          setUserDataVideoCount(videoData); 
+          setUserDataJobs(jobsData)
+          setUserDataEvent(eventData)
+          setUserDataPodcast(podcastData)
+          setUserDataVideo(videoData)
+          console.log(response.data, "Hello Selected user data count"); 
+        } catch (error) {
+          console.error("Error fetching user data count:", error);
+        }
+      };
+  
+      fetchUserDataCount();
+    }
+  }, [selectedUser]);
+
+  console.log(userDataVideo, "Once there was a thirsty crow")
 
   if (selectedUser) {
     const textStyle = selectedUser.active
@@ -287,7 +318,7 @@ const Team = ({ onBack, userId }) => {
           <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" padding="30px 5px" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenJobsModal}>
             <StatBox
               subtitle="Total Jobs"
-              title="40"
+              title={userDataJobsCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -297,7 +328,7 @@ const Team = ({ onBack, userId }) => {
           >
             <StatBox
               subtitle="Total Podcast"
-              title="25"
+              title={userDataPodcastCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
@@ -313,22 +344,22 @@ const Team = ({ onBack, userId }) => {
           >
             <StatBox
               subtitle="Total Video"
-              title="22"
+              title={userDataVideoCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
           <Box backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" boxShadow="0 3px 10px rgba(0, 0, 0, 0.2)" onClick={handleOpenEventsModal}>
             <StatBox
               subtitle="Total Events"
-              title="19"
+              title={userDataEventCount.length}
               icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
             />
           </Box>
         </Box>
-        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} userId={selectedUser.Users_PK} />
-        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} userId={selectedUser.Users_PK} />
-        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} userId={selectedUser.Users_PK} />
-        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} userId={selectedUser.Users_PK} />
+        <UserVideo open={openVedioModal} handleClose={handleCloseVideoModal} data={userDataVideo} />
+        <UserEvents open={openEventsModal} handleClose={handleCloseEventsModal} data={userDataEvent} />
+        <UserPodcast open={openPodcastModal} handleClose={handleClosePodcastModal} data={userDataPodcast} />
+        <UserJobs open={openJobsModal} handleClose={handleCloseJobsModal} data={userDataJobs} />
       </Box>
     );
   }
