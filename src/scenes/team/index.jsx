@@ -240,7 +240,6 @@ const Team = ({ onBack, userId }) => {
     }
   }, [selectedUser]);
 
-  console.log(userDataVideo, "Once there was a thirsty crow")
 
   if (selectedUser) {
     const textStyle = selectedUser.active
