@@ -24,6 +24,8 @@ import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined'
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined';
+import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 
 
 const Sidebar = () => {
@@ -246,6 +248,34 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
+              Payment
+            </Typography>
+
+            <MenuItem
+              active={selected === "Buy Ticket"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Buy Ticket")}
+              icon={<ReceiptOutlinedIcon />}
+            >
+              <Typography>Buy Ticket</Typography>
+              <Link to="/buy-ticket" />
+            </MenuItem>
+
+            <MenuItem
+              active={selected === "Approve Payment"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Approve Payment")}
+              icon={<PaymentOutlinedIcon />}
+            >
+              <Typography>Approve Payment</Typography>
+              <Link to="/approve-payment" />
+            </MenuItem>
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
               Others
             </Typography>
 
@@ -269,15 +299,6 @@ const Sidebar = () => {
               <Link to="/subadmin" />
             </MenuItem>
 
-            {/* <MenuItem
-              active={selected === "Setting"}
-              style={{ color: colors.grey[100] }}
-              onClick={() => setSelected("Setting")}
-              icon={<SettingsOutlinedIcon />}
-            >
-              <Typography>Setting</Typography>
-              <Link to="/setting" />
-            </MenuItem> */}
           </Box>
         </Menu>
       </ProSidebar>

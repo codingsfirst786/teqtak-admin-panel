@@ -127,6 +127,8 @@ import MonthlyPodcast from "./scenes/podcast/MonthlyPodcast";
 import Reports from "./scenes/reports/Reports";
 import Setting from "./scenes/Setting";
 import SubAdmin from "./scenes/Admin/SubAdmin";
+import UserPayment from "./scenes/Payment/UserPayment";
+import ApprovePayment from "./scenes/Payment/ApprovePayment";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -274,6 +276,11 @@ function App() {
               <Route path="/weeklyviewerevents" element={<WeeklyViewerEvents />} />
               {/* Question */}
               <Route path="/addQuestion" element={<AddQuestion />} />
+
+              {/* Payment  */}
+              <Route path="/buy-ticket" element={<UserPayment />} />
+              <Route path="/approve-payment" element={<ApprovePayment />} />
+
             </Routes>
           </main>
         </div>

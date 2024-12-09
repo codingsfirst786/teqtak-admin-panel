@@ -17,26 +17,69 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import { useNavigate } from "react-router-dom";
 import PreviewIcon from '@mui/icons-material/Preview';
 import {  Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { fetchEnterpreneurCount, fetchInvestorCount, fetchTotalCOunt, fetchViewerCount } from "../../Api/AllUser/TotalUser";
 
 
 const Dashboard = () => {
+
+  const [totalCount, setTotalCount] = useState(0)
+  const [investorCount, setInvestorCount] = useState(0)
+  const [enterpreneurCount, setEnterpreneurCount] = useState(0)
+  const [viewerCount, setViewerCount] = useState(0)
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const navigate = useNavigate()
 
   const handleInvestor = () => {
-    navigate("/user")
+    navigate("/investors")
   }
   const handleenterpreneur = () => {
-    navigate("/user")
+    navigate("/enterpreneur")
   }
   const handleviewer = () => {
-    navigate("/user")
+    navigate("/viewers")
   }
   const handeltraffic = () => {
-    navigate("/user")
+    navigate("/team")
   }
+
+
+  useEffect(()=> {
+    const data = async () => {
+      const response = await fetchTotalCOunt()
+      console.log('Dashoboard Response is ', response.count)
+      setTotalCount(response.count)
+    }
+    data()
+  },[])
+  useEffect(()=> {
+    const data = async () => {
+      const response = await fetchInvestorCount()
+      console.log('Dashoboard Response is ', response.data.count)
+      setInvestorCount(response.data.count)
+    }
+    data()
+  },[])
+  useEffect(()=> {
+    const data = async () => {
+      const response = await fetchEnterpreneurCount()
+      console.log('Dashoboard Response is ', response.data.count)
+      setEnterpreneurCount(response.data.count)
+    }
+    data()
+  },[])
+  useEffect(()=> {
+    const data = async () => {
+      const response = await fetchViewerCount()
+      console.log('Dashoboard Response is ', response.data.count)
+      setViewerCount(response.data.count)
+    }
+    data()
+  },[])
+
 
   const data = [
     { date: '2024-08-01', totalUsers: 100 },
@@ -74,7 +117,7 @@ const Dashboard = () => {
         >
           <StatBox
             subtitle="Total Invester"
-            title="40"
+            title={investorCount}
             icon={
               <InsertInvitationIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -93,7 +136,7 @@ const Dashboard = () => {
           onClick={handleenterpreneur}
         >
           <StatBox
-            title="90"
+            title={enterpreneurCount}
             subtitle="Total Interpenurer"
             icon={
               <BusinessCenterIcon
@@ -113,7 +156,7 @@ const Dashboard = () => {
           onClick={handleviewer}
         >
           <StatBox
-            title="60"
+            title={viewerCount}
             subtitle="Total Viewer"
 
             icon={
@@ -132,7 +175,7 @@ const Dashboard = () => {
           onClick={handeltraffic}
         >
           <StatBox
-            title="190"
+            title={totalCount}
             subtitle="Total Traffic"
             icon={
               <TrafficIcon
