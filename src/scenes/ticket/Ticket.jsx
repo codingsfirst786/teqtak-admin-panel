@@ -10,6 +10,7 @@ import StatBox from "../../components/StatBox";
 import Header from "../../components/Header";
 import axios from "axios";
 import img from '../podcast/image1.jpeg'
+import { fetchTickets } from "../../Api/Ticket/Ticket.Api";
 
 const Ticket = () => {
   const theme = useTheme();
@@ -18,20 +19,17 @@ const Ticket = () => {
   const [count, setCount] = useState(0)
   const navigate = useNavigate();
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/tickets/`)
-        const result = await response.data;
-        console.log("Fetched data:", result);
-        const updatedData = result.data.map(ticket => ({
+        const response = await fetchTickets()
+        const updatedData = response.data.map(ticket => ({
           ...ticket,
         }));
 
-        console.log(result.count)
-        setCount(result.count)
+        console.log(response.count)
+        setCount(response.count)
         console.log(updatedData)
         setTickets(updatedData);
       }
@@ -41,29 +39,6 @@ const Ticket = () => {
     }
     getData();
   }, [])
-  // const DailyEnterpreneurHandle = () => {
-  //   navigate('/dailyEnterpreneur');
-  // };
-
-  // const WeeklyEnterpreneurHandle = () => {
-  //   navigate('/weeklyEnterpreneur');
-  // };
-
-  // const MonthlyEnterpreneurHandle = () => {
-  //   navigate('/monthlyEnterpreneur');
-  // };
-
-  // const TotalEnterpreneurHandle = () => {
-  //   navigate('/totalyEnterpreneur');
-  // };
-
-  // const handleViewProfileClick = (user) => {
-  //   setSelectedUser(user); // Set selected user for profile view
-  // };
-
-  // const handleBackClick = () => {
-  //   setSelectedUser(null); // Reset to show the table
-  // };
 
   const columns = [
     {

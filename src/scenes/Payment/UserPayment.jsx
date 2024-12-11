@@ -1,155 +1,128 @@
-import { useEffect, useState } from "react";
-import { Box, Typography, useTheme, Button, Avatar } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import StarIcon from '@mui/icons-material/Star';
+import { Box, Typography, Avatar, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
-import TrafficIcon from "@mui/icons-material/Traffic";
-import { useNavigate } from "react-router-dom";
-import StatBox from "../../components/StatBox";
 import Header from "../../components/Header";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import img from '../podcast/image1.jpeg'
-import UserVideo from "../../components/UserVideo";
-import UserPodcast from "../../components/UserPodcast";
-import UserEvents from "../../components/UserEvents";
-import UserJobs from "../../components/UserJobs";
-import { fetchAllUserCount } from "../../Api/AllUser/AllUserCount.api";
 
-const UserPayment = ({ onBack, userId }) => {
+const dummyData = [
+  {
+    eventName: "Tech Conference",
+    creator: "John Doe",
+    time: "10:00 AM, Dec 12, 2024",
+    users: [
+      { name: "Alice", ticket: "Standard", payment: "$100", email: "alice@example.com" },
+      { name: "Bob", ticket: "VIP", payment: "$200", email: "bob@example.com" },
+      { name: "Charlie", ticket: "Standard", payment: "$100", email: "charlie@example.com" },
+    ],
+  },
+  {
+    eventName: "Art Workshop",
+    creator: "Jane Smith",
+    time: "2:00 PM, Dec 15, 2024",
+    users: [
+      { name: "Diana", ticket: "VIP", payment: "$150", email: "diana@example.com" },
+      { name: "Edward", ticket: "Standard", payment: "$80", email: "edward@example.com" },
+      { name: "Fiona", ticket: "Standard", payment: "$80", email: "fiona@example.com" },
+    ],
+  },
+  {
+    eventName: "Music Festival",
+    creator: "Alex Johnson",
+    time: "6:00 PM, Dec 20, 2024",
+    users: [
+      { name: "George", ticket: "Premium", payment: "$300", email: "george@example.com" },
+      { name: "Hannah", ticket: "Standard", payment: "$120", email: "hannah@example.com" },
+      { name: "Ian", ticket: "VIP", payment: "$250", email: "ian@example.com" },
+    ],
+  },
+];
+
+const UserPayment = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [ticket, setTicket] = useState([]);
-
-  const [count, setCount] = useState(0)
-  const [refresh, setRefresh] = useState(false)
+  const [saleTicket, setSaleTicket] = useState([])
 
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/allusers
-`);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/tickets/event`);
+        const transformedData = response.data.map((item) => ({
+          eventName: item.data.event.eventTitle,
+          creator: item.data.poster.name,
+          time: new Date(item.data.event.createdAt).toLocaleString(),
+          users: item.data.tickcets.map((ticket) => ({
+            name: ticket.buyer.name,
+            pic: ticket.buyer.picUrl,
+            ticket: `Ticket ID: ${ticket.ticketBuyerId}`,
+            payment: `Payment: $${ticket.totalAmount}`,
+            email: ticket.buyer.email,
+          })),
+        }));
+        console.log(transformedData, 'gvcgsd cgd sckhdsvhas cgh dscgas cjadsv cgsad')
+        setSaleTicket(transformedData);
+      } catch (error) {
+        console.error('Error fetching tickets:', error);
+      }
+    };
 
-//   useEffect(() => {
-//     const getData = async () => {
-//       try {
-//         const result = await fetchData();
-//         console.log("Fetched data:", result);
+    getData();
+  }, []);
 
-//         const updatedData = result.data.map(user => ({
-//           ...user,
-//           active: true
-//         }));
-//         setCount(result.count)
-//         console.log("this is updated data", updatedData)
-//         // setTeam(updatedData);
-//       } catch (error) {
-//         console.error('Fetching data error', error);
-//       }
-//     };
-//     getData();
-//   }, [refresh]);
-
- 
-
-
-  const columns = [
-    {
-      field: "profile",
-      headerName: "Profile",
-      flex: 1,
-      renderCell: (params) => (
-        <Avatar alt={img} src={params.row.picUrl} />
-      ),
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      valueGetter: (params) => params.row.name,
-      cellClassName: (params) => params.row.active ? "name-column--cell" : "name-column--cell inactive",
-    },
-    {
-      field: "isBlocked",
-      headerName: "Status",
-      flex: 1,
-      valueGetter: (params) => params.row.isBlocked,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-      valueGetter: (params) => params.row.email,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      flex: 1,
-      valueGetter: (params) => params.row.role,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 200,
-      renderCell: (params) => (
-        <Box display="flex" gap="10px">
-          <Button variant="contained" color="primary">
-            Profile
-          </Button>
-          <Button
-            variant="contained"
-            color={params.row.isBlocked === "true" ? "error" : "success"}
-            onClick={() => {
-              console.log("Helllo ",params.row.Users_PK, params.row.isBlocked);
-            }}
-          >
-            {params.row.isBlocked === "true" ? "Activate" : "Deactivate"}
-          </Button>
-        </Box>
-      ),
-    },
-  ];
-  
- 
 
   return (
-    <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
-      <Box>
-        <Box display="grid" gridTemplateColumns="repeat(6, 3fr)" gridAutoRows="140px" gap="20px">
-          <Box display="flex" justifyContent="space-between" alignItems="center" gridColumn="span 6">
-            <Header title="TOTAL Buyer" subtitle="Managing the All Buyer" />
+    <Box sx={{ padding: "20px", height:"87vh", overflow:'auto' }}>
+      <Header title="User Payment" subtitle="Manage All User Payment" />
+      <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap="20px">
+        {saleTicket.map((event, index) => (
+          <Box
+            key={index}
+            sx={{
+              backgroundColor: colors.primary[400],
+              padding: "20px",
+              borderRadius: "8px",
+              height:"348px",
+              overflow:"auto"
+            }}
+          >
+            <Typography variant="h6" sx={{ marginBottom: "10px", color: colors.grey[100] }}>
+              {event.eventName}
+            </Typography>
+            <Typography sx={{ marginBottom: "5px", color: colors.grey[300] }}>
+              Created by: {event.creator}
+            </Typography>
+            <Typography sx={{ marginBottom: "15px", color: colors.grey[300] }}>
+              Time: {event.time}
+            </Typography>
+            <Box>
+              {event.users.map((user, idx) => (
+                <Box
+                  key={idx}
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    backgroundColor: colors.primary[500],
+                    padding: "10px",
+                    borderRadius: "4px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Box display="flex" alignItems="center" gap="10px">
+                    <Avatar><img src={user.pic} alt="" width={'43px'} height={'43px'}/></Avatar>
+                    <Box>
+                      <Typography sx={{ color: colors.grey[100] }}>{user.name}</Typography>
+                      <Typography sx={{ color: colors.greenAccent[500] }}>{user.payment}</Typography>
+                    </Box>
+                  </Box>
+                  {/* <Box>
+                    <Typography sx={{ color: colors.grey[300] }}>{user.email}</Typography>
+                  </Box> */}
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>
-        <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gridAutoRows="140px" gap="20px">
-          <Box gridColumn="span 3" backgroundColor={colors.primary[400]} display="flex" alignItems="center" justifyContent="center" >
-            <StatBox
-              subtitle="Daily User"
-              title= '30'
-              icon={<InsertInvitationIcon sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />}
-            />
-          </Box>
-        </Box>
-
-        <Box m="40px 0 0 0" height="75vh" sx={{
-          "& .MuiDataGrid-root": { border: "none" },
-          "& .MuiDataGrid-cell": { borderBottom: "none" },
-          "& .name-column--cell": { color: colors.greenAccent[300] },
-          "& .name-column--cell.inactive": { filter: 'blur(2px)', color: 'red', textDecoration: 'line-through' },
-          "& .MuiDataGrid-columnHeaders": { backgroundColor: colors.blueAccent[700], borderBottom: "none" },
-          "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
-          "& .MuiDataGrid-footerContainer": { borderTop: "none", backgroundColor: colors.blueAccent[700] },
-        }}>
-          {/* <DataGrid /> */}
-        </Box>
+        ))}
       </Box>
     </Box>
   );

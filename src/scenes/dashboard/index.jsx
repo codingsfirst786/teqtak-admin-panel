@@ -16,10 +16,11 @@ import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import { useNavigate } from "react-router-dom";
 import PreviewIcon from '@mui/icons-material/Preview';
-import {  Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { fetchEnterpreneurCount, fetchInvestorCount, fetchTotalCOunt, fetchViewerCount } from "../../Api/AllUser/TotalUser";
+import { fetchPaymentRequest } from "../../Api/Ticket/PaymentRequest";
 
 
 const Dashboard = () => {
@@ -28,6 +29,9 @@ const Dashboard = () => {
   const [investorCount, setInvestorCount] = useState(0)
   const [enterpreneurCount, setEnterpreneurCount] = useState(0)
   const [viewerCount, setViewerCount] = useState(0)
+  const [payment, setPayment] = useState([])
+  const [pendingPayment, setPendingPayment] = useState([])
+
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -45,41 +49,67 @@ const Dashboard = () => {
   const handeltraffic = () => {
     navigate("/team")
   }
+  const handleNavigate = () => {
+    navigate('/approve-payment')
+  }
 
-
-  useEffect(()=> {
+  useEffect(() => {
     const data = async () => {
       const response = await fetchTotalCOunt()
       console.log('Dashoboard Response is ', response.count)
       setTotalCount(response.count)
     }
     data()
-  },[])
-  useEffect(()=> {
+  }, [])
+  useEffect(() => {
     const data = async () => {
       const response = await fetchInvestorCount()
       console.log('Dashoboard Response is ', response.data.count)
       setInvestorCount(response.data.count)
     }
     data()
-  },[])
-  useEffect(()=> {
+  }, [])
+  useEffect(() => {
     const data = async () => {
       const response = await fetchEnterpreneurCount()
       console.log('Dashoboard Response is ', response.data.count)
       setEnterpreneurCount(response.data.count)
     }
     data()
-  },[])
-  useEffect(()=> {
+  }, [])
+  useEffect(() => {
     const data = async () => {
       const response = await fetchViewerCount()
       console.log('Dashoboard Response is ', response.data.count)
       setViewerCount(response.data.count)
     }
     data()
-  },[])
+  }, [])
 
+  useEffect(() => {
+    const payment = async () => {
+      const response = await fetchPaymentRequest()
+      const result = response.data;
+      const pendingRequests = result.filter(item => item.requestStatus === "approve");
+
+      console.log(pendingRequests, "Filtered Pending Requests");
+      setPayment(pendingRequests);
+    }
+    payment()
+  }, [])
+  useEffect(() => {
+    const payment = async () => {
+      const response = await fetchPaymentRequest()
+      const result = response.data;
+      const pendingRequests = result.filter(item => item.requestStatus === "pending");
+
+      console.log(pendingRequests, "Filtered Pending Requests");
+      setPendingPayment(pendingRequests);
+    }
+    payment()
+  }, [])
+
+  console.log("Pending Hellooooooo", pendingPayment)
 
   const data = [
     { date: '2024-08-01', totalUsers: 100 },
@@ -91,7 +121,7 @@ const Dashboard = () => {
   // const chartData = userData || data;
 
   return (
-    <Box sx={{height:"87vh",overflowY:"auto", padding:"20px"}}>
+    <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
@@ -192,45 +222,53 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
         >
           <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
+            gridColumn="span 4"
+            gridRow="span 2"
+            backgroundColor={colors.primary[400]}
+            overflow="auto"
           >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Revenue Generated
-              </Typography>
-              <Typography
-                variant="h3"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                $59,342.32
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              borderBottom={`4px solid ${colors.primary[500]}`}
+              colors={colors.grey[100]}
+              p="15px"
+            >
+              <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+                Pending Transactions
               </Typography>
             </Box>
-            <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box>
-          </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="totalUsers" stroke="#8884d8" activeDot={{ r: 8 }} />
-            </LineChart>
+            {pendingPayment.map((transaction, i) => (
+              <Box
+                key={`${transaction.txId}-${i}`}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                borderBottom={`4px solid ${colors.primary[500]}`}
+                p="15px"
+              >
+                <Box>
+                  <Typography
+                    color={colors.greenAccent[500]}
+                    variant="h5"
+                    fontWeight="600"
+                  >
+                    {transaction.user.name}
+                  </Typography>
+                </Box>
+                <Box color={colors.grey[100]}>{transaction.user.email}</Box>
+                <Box variant="h5" color={colors.greenAccent[500]}>{transaction.amount}</Box>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={handleNavigate}
+                  sx={{ width: "13%", marginLeft: "10px" }}
+                >
+                  Action
+                </Button>
+              </Box>
+            ))}
           </Box>
         </Box>
         <Box
@@ -251,7 +289,7 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {payment.map((transaction, i) => (
             <Box
               key={`${transaction.txId}-${i}`}
               display="flex"
@@ -266,19 +304,19 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction.user.name}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.phoneNumber}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              <Box color={colors.grey[100]}>{transaction.createdAt}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                ${transaction.amount}
               </Box>
             </Box>
           ))}
