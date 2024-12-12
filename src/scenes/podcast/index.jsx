@@ -32,14 +32,13 @@ const Podcast = () => {
         }));
         setCount(result.count);
         setPodcast(updatedData);
-        console.log(updatedData);
       } catch (error) {
         console.error('Fetching data error', error);
       }
     };
     getData();
   }, [process.env.REACT_APP_BACK_URL]);
-
+console.log("Heyyyyyyyyyyyyyyyyyyyyyyyy",podcast)
   // Get Count By Date 
   useEffect(() => {
     const getUserCount = async () => {
@@ -63,6 +62,11 @@ const Podcast = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
+
 
   const handleDetailClick = (image) => {
     setSelectedImage(image);
@@ -180,7 +184,7 @@ const Podcast = () => {
 
         {/* Similar Podcasts Section */}
         <Typography variant="h6" mt={4} mb={2} style={{ color: "#4CCEAC" }}>Similar Podcasts</Typography>
-        <Box display="flex" flexWrap="wrap" gap={2}>
+        <Box display="flex" flexWrap="wrap" gap={2} >
           {podcast.map((elm, ind) => (
             <Card key={ind} sx={{ width: { xs: '100%', sm: '32%' }, position: 'relative', height: '300px' }}>
               <CardMedia
@@ -192,12 +196,16 @@ const Podcast = () => {
               <Box position="absolute" bottom={0} left={0} width="100%" bgcolor="rgba(0,0,0,0.6)" color="white" p={2}>
                 <Typography variant="h4" style={{ color: "#4CCEAC" }}>{elm.episodeTitle}</Typography>
                 <Typography variant="h6">Type : {elm.podcastType}</Typography>
+                <Typography variant="h6">Poster Name: {elm?.user?.name || "Hello"}</Typography>
                 <Box display="flex" justifyContent="space-between">
                   {/* <Typography variant="body2" display="flex" alignItems="center" gap={1}>
                     {elm.user.name}
                   </Typography> */}
-                  <Button variant="contained" color="primary" onClick={() => handleDetailClick(elm)}>
+                  <Button variant="contained" color="secondary" onClick={() => handleDetailClick(elm)}>
                     Detail
+                  </Button>
+                  <Button variant="contained" color="secondary" onClick={() =>handleUser(elm.userID)}>
+                    View Profile
                   </Button>
                   <Button variant="contained" color="primary" sx={{ marginLeft: "20px" }} onClick={() => handleDeletePodact(elm._id)}>
                     Delete

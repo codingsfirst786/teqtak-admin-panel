@@ -54,6 +54,10 @@ const GetJobs = () => {
   const handleMonthlyJobs = () => {
     navigate('/monthlyJobs')
   }
+
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
  
   // Get Count By Date 
   useEffect(() => {
@@ -87,6 +91,9 @@ const GetJobs = () => {
       console.error('Error updating job activation status', error);
     }
   };
+
+  console.error('Error updating job activation status', jobs);
+
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -249,6 +256,11 @@ const GetJobs = () => {
                   onClick={() => toggleActivation(job._id, job.isActivated)}
                 >
                   {job.isActivated === "true" ? "Deactivate" : "Activate"}
+                </Button>
+                <Button variant="contained" color="secondary" fullWidth sx={{mt:"10px"}}
+                onClick={()=> handleUser(job?.poster?.Users_PK)}
+                >
+                  Veiw Profile
                 </Button>
               </Box>
             </Box>

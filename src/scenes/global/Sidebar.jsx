@@ -233,6 +233,15 @@ const Sidebar = () => {
               <Link to="/report" />
             </MenuItem>
 
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Question
+            </Typography>
+
             <MenuItem
               active={selected === "Add Question"}
               style={{ color: colors.grey[100] }}
@@ -241,6 +250,16 @@ const Sidebar = () => {
             >
               <Typography>Add Question</Typography>
               <Link to="/addQuestion" />
+            </MenuItem>
+
+            <MenuItem
+              active={selected === "Get Task"}
+              style={{ color: colors.grey[100] }}
+              onClick={() => setSelected("Get Task")}
+              icon={<PaymentOutlinedIcon />}
+            >
+              <Typography>Get Task</Typography>
+              <Link to="/get-task" />
             </MenuItem>
 
             <Typography

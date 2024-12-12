@@ -129,6 +129,7 @@ import Setting from "./scenes/Setting";
 import SubAdmin from "./scenes/Admin/SubAdmin";
 import UserPayment from "./scenes/Payment/UserPayment";
 import ApprovePayment from "./scenes/Payment/ApprovePayment";
+import AllTask from "./scenes/question/AllTask";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -149,6 +150,7 @@ function App() {
 
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<Dashboard />} />
+              <Route path="/userProfile" element={<UserProfile />} />
 
               {/* Other Routes */}
               <Route path="/setting" element={<Setting />} />
@@ -276,6 +278,7 @@ function App() {
               <Route path="/weeklyviewerevents" element={<WeeklyViewerEvents />} />
               {/* Question */}
               <Route path="/addQuestion" element={<AddQuestion />} />
+              <Route path="/get-task" element={<AllTask />} />
 
               {/* Payment  */}
               <Route path="/buy-ticket" element={<UserPayment />} />
