@@ -41,10 +41,13 @@ const MonthlyInvestor = () => {
     navigate('/investors');
   };
 
-  if (selectedUser) {
-    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  }
+  // if (selectedUser) {
+  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
+  // }
 
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Box component={Paper} backgroundColor={colors.primary[400]}>
@@ -66,7 +69,7 @@ const MonthlyInvestor = () => {
           <TableBody>
             {dailyUser.map((user, index) => (
               <TableRow key={index} 
-              // onClick={() => handleProfileClick(user)}
+              onClick={() => handleUser(user.Users_PK)}
                style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />

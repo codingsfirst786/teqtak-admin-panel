@@ -13,14 +13,14 @@ const WeeklyInvestor = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [ dailyUser, setDailyUser] = useState([])
+  const [dailyUser, setDailyUser] = useState([])
   console.log("dailyUser", dailyUser)
   const navigate = useNavigate();
 
   useEffect(() => {
     const getDailyUsers = async () => {
       try {
-        const users = await fetchAllInvestorsCount(); 
+        const users = await fetchAllInvestorsCount();
         setDailyUser(users.weekUsers);
       } catch (error) {
         console.log(error);
@@ -34,16 +34,18 @@ const WeeklyInvestor = () => {
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); 
+    setSelectedUser(null);
   };
 
   const HandleUser = () => {
     navigate('/investors');
   };
-
-  if (selectedUser) {
-    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  }
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
+  // if (selectedUser) {
+  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
+  // }
 
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
@@ -65,9 +67,9 @@ const WeeklyInvestor = () => {
           </TableHead>
           <TableBody>
             {dailyUser.map((user, index) => (
-              <TableRow key={index} 
-              // onClick={() => handleProfileClick(user)}
-               style={{ cursor: 'pointer' }}>
+              <TableRow key={index}
+                onClick={() => handleUser(user.Users_PK)}
+                style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />
                   {/* <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} /> */}

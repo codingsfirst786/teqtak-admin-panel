@@ -46,37 +46,57 @@ const Ticket = () => {
       headerName: "Event Location",
       flex: 1,
       valueGetter: (params) => params.row.event.eventLocation,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
+      cellClassName: (params) => (params.row.active ? "" : "inactive"),
     },
     {
       field: "ticketBuyerId",
       headerName: "Buyer Name",
       flex: 1,
       valueGetter: (params) => params.row.buyer.name,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
+      renderCell: (params) => {
+        return (
+          <span
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate('/userProfile', { state: { userPK: params.row.buyer.Users_PK } })}
+          >
+            {params.row.buyer.name}
+          </span>
+        );
+      },
+      cellClassName: (params) => (params.row.active ? "" : "inactive"),
     },
     {
       field: "ticketSellerId",
       headerName: "Seller Name",
       flex: 1,
       valueGetter: (params) => params.row.seller.name,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
+      renderCell: (params) => {
+        return (
+          <span
+            // style={{ color: "blue", cursor: "pointer" }}
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate('/userProfile', { state: { userPK: params.row.seller.Users_PK } })}
+          >
+            {params.row.seller.name}
+          </span>
+        );
+      },
+      cellClassName: (params) => (params.row.active ? "" : "inactive"),
     },
     {
       field: "createdAt",
       headerName: "Created At",
       flex: 1,
       valueGetter: (params) => params.row.createdAt,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
+      cellClassName: (params) => (params.row.active ? "" : "inactive"),
     },
     {
       field: "ticketEventId",
-      headerName: "Ticke Id",
+      headerName: "Ticket ID",
       flex: 1,
       valueGetter: (params) => params.row.ticketEventId,
-      cellClassName: (params) => params.row.active ? "" : "inactive",
-    }
-   
+      cellClassName: (params) => (params.row.active ? "" : "inactive"),
+    },
   ];
 
 

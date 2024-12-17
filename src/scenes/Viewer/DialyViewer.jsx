@@ -30,21 +30,15 @@ const DialyViewer = () => {
     fetchDailyUser();
   },[])
 
-  const handleProfileClick = (user) => {
-    setSelectedUser(user);
-  };
-
-  const handleBackClick = () => {
-    setSelectedUser(null); 
-  };
-
   const HandleUser = () => {
     navigate('/viewers');
   };
-
-  if (selectedUser) {
-    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  }
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
+  // if (selectedUser) {
+  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
+  // }
 
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
@@ -67,7 +61,7 @@ const DialyViewer = () => {
           <TableBody>
             {dailyUser.map((user, index) => (
               <TableRow key={index} 
-              // onClick={() => handleProfileClick(user)} 
+              onClick={() => handleUser(user.Users_PK)}
               style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />

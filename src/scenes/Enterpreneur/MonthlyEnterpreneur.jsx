@@ -11,39 +11,33 @@ const MonthlyEnterpreneur = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [ dailyUser, setDailyUser] = useState([])
+  const [dailyUser, setDailyUser] = useState([])
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    const fetchDailyUser = async () =>{
-      try{
+  useEffect(() => {
+    const fetchDailyUser = async () => {
+      try {
         const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/admin/info/entrepreneur
           `);
-          const result = response.data.monthUsers;
-          setDailyUser(result)
+        const result = response.data.monthUsers;
+        setDailyUser(result)
       }
-      catch(err){
+      catch (err) {
         console.log(err)
       }
     }
     fetchDailyUser();
-  },[])
-
-  const handleProfileClick = (user) => {
-    setSelectedUser(user);
-  };
-
-  const handleBackClick = () => {
-    setSelectedUser(null); // Reset the selected user to show the table again
-  };
+  }, [])
 
   const HandleUser = () => {
     navigate('/enterpreneur');
   };
-
-  if (selectedUser) {
-    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  }
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
+  // if (selectedUser) {
+  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
+  // }
 
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
@@ -66,8 +60,8 @@ const MonthlyEnterpreneur = () => {
           <TableBody>
             {dailyUser.map((user, index) => (
               <TableRow key={index}
-              //  onClick={() => handleProfileClick(user)} 
-               style={{ cursor: 'pointer' }}>
+                onClick={() => handleUser(user.Users_PK)}
+                style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />
                   {/* <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} /> */}

@@ -88,7 +88,6 @@ const Events = () => {
     }
   };
 
-
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -102,6 +101,10 @@ const Events = () => {
   const handleMonthlyEvents = () => {
     navigate('/monthlyEvents')
   }
+  // const handleUser = (id) => {
+  //   navigate('/userProfile', { state: { userPK: id } });
+  // };
+
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
       <Header title="Event" />
@@ -207,6 +210,14 @@ const Events = () => {
                       onClick={() => handleToggleActivation(event._id, event.isActivated)}
                     >
                       {event.isActivated === "true" ? "Deactivate" : "Activate"}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      sx={{mx:"5px"}}
+                      // onClick={() => handleUser(event._id, event.isActivated)}
+                    >
+                      View Profile
                     </Button>
                   </div>
                 </div>

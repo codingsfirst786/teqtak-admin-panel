@@ -18,7 +18,7 @@ const DialyInvestor = () => {
   useEffect(() => {
     const getDailyUsers = async () => {
       try {
-        const users = await fetchAllInvestorsCount(); 
+        const users = await fetchAllInvestorsCount();
         setDailyUser(users.todayUsers);
       } catch (error) {
         console.log(error);
@@ -32,16 +32,19 @@ const DialyInvestor = () => {
   };
 
   const handleBackClick = () => {
-    setSelectedUser(null); 
+    setSelectedUser(null);
   };
 
   const HandleUser = () => {
     navigate('/investors');
   };
+  const handleUser = (id) => {
+    navigate('/userProfile', { state: { userPK: id } });
+  };
 
-  if (selectedUser) {
-    return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  }
+  // if (selectedUser) {
+  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
+  // }
 
   return (
     <Box sx={{ height: '87vh', overflowY: 'auto', padding: '20px' }}>
@@ -64,8 +67,8 @@ const DialyInvestor = () => {
           <TableBody>
             {dailyUser.map((user, index) => (
               <TableRow key={index}
-              //  onClick={() => handleProfileClick(user)} 
-               style={{ cursor: 'pointer' }}>
+                onClick={() => handleUser(user.Users_PK)}
+                style={{ cursor: 'pointer' }}>
                 <TableCell component="th" scope="row">
                   <Avatar alt={user.name} src={user.picUrl} sx={{ width: 56, height: 56 }} />
                 </TableCell>
