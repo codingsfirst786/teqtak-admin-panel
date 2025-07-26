@@ -52,30 +52,30 @@ const GeographyChart = ({ isDashboard = false }) => {
       legends={
         !isDashboard
           ? [
-              {
-                anchor: "bottom-left",
-                direction: "column",
-                justify: true,
-                translateX: 20,
-                translateY: -100,
-                itemsSpacing: 0,
-                itemWidth: 94,
-                itemHeight: 18,
-                itemDirection: "left-to-right",
-                itemTextColor: colors.grey[100],
-                itemOpacity: 0.85,
-                symbolSize: 18,
-                effects: [
-                  {
-                    on: "hover",
-                    style: {
-                      itemTextColor: "#ffffff",
-                      itemOpacity: 1,
-                    },
+            {
+              anchor: "bottom-left",
+              direction: "column",
+              justify: true,
+              translateX: 20,
+              translateY: -100,
+              itemsSpacing: 0,
+              itemWidth: 94,
+              itemHeight: 18,
+              itemDirection: "left-to-right",
+              itemTextColor: colors.grey[100],
+              itemOpacity: 0.85,
+              symbolSize: 18,
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemTextColor: "#ffffff",
+                    itemOpacity: 1,
                   },
-                ],
-              },
-            ]
+                },
+              ],
+            },
+          ]
           : undefined
       }
     />

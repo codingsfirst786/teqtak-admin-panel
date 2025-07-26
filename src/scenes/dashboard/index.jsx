@@ -118,11 +118,11 @@ const Dashboard = () => {
     { date: '2024-08-04', totalUsers: 170 },
     { date: '2024-08-05', totalUsers: 200 },
   ];
-  // const chartData = userData || data;
+
 
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
-      {/* HEADER */}
+
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
 

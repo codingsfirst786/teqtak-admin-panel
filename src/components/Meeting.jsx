@@ -8,7 +8,7 @@ import axios from 'axios';
 const Meeting = () => {
   const [count, setCount] = useState(0);
   const [meetings, setMeetings] = useState([]);
-  const [selectedMeetingId, setSelectedMeetingId] = useState(null); 
+  const [selectedMeetingId, setSelectedMeetingId] = useState(null);
   const [singleMeeting, setSingleMeeting] = useState([]);
 
   // Fetch all meetings
@@ -32,18 +32,27 @@ const Meeting = () => {
 
   useEffect(() => {
     if (selectedMeetingId) {
+      /*************  ✨ Codeium Command ⭐  *************/
+      /**
+       * Fetches a single meeting from the database by meeting ID
+       * 
+       * @param {string} meetingId - The ID of the meeting to fetch
+       * 
+       * @returns {Promise<void>}
+       */
+      /******  f649e6ea-33cc-46a9-a9ed-544e52a10505  *******/
       const getMeeting = async () => {
         try {
           const response = await axios.get(`${process.env.REACT_APP_BACK_URL}/meetings/${selectedMeetingId}`);
           const result = await response.data.user;
-          setSingleMeeting(result); 
+          setSingleMeeting(result);
         } catch (error) {
           console.log("Error fetching single meeting", error);
         }
       };
       getMeeting();
     }
-  }, [selectedMeetingId]); 
+  }, [selectedMeetingId]);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -57,7 +66,7 @@ const Meeting = () => {
           backgroundColor={colors.primary[400]}
           key={meeting._id}
           sx={{ width: '70%', m: "14px auto", borderRadius: "7px", cursor: 'pointer', padding: "7px" }}
-          onClick={() => setSelectedMeetingId(meeting._id)} 
+          onClick={() => setSelectedMeetingId(meeting._id)}
         >
           <Box sx={{ display: 'flex', m: "13px" }}>
             <Typography variant="h5" fontWeight="bolder" fontSize="23px" sx={{ color: colors.greenAccent[400] }}>

@@ -149,7 +149,7 @@ const MonthlyEnterpreneurJobs = () => {
                 </Typography>
               </Box>
               <Box textAlign="center">
-                {/* {elm.button === "Apply Now" ? ( */}
+
                 <Button
                   variant="contained"
                   fullWidth

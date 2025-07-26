@@ -35,9 +35,7 @@ const MonthlyEnterpreneur = () => {
   const handleUser = (id) => {
     navigate('/userProfile', { state: { userPK: id } });
   };
-  // if (selectedUser) {
-  //   return <DailyEnterpreneurUser user={selectedUser} onBack={handleBackClick} />;
-  // }
+
 
   return (
     <Box sx={{ height: "87vh", overflowY: "auto", padding: "20px" }}>
@@ -76,6 +74,7 @@ const MonthlyEnterpreneur = () => {
         </Table>
       </Box>
     </Box>
+
   );
 };
 

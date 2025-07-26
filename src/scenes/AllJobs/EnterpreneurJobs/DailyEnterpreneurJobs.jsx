@@ -73,26 +73,26 @@ const DailyEnterpreneurJobs = () => {
   }
   return (
     <Box m="20px">
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(6, 3fr)"
+        gridAutoRows="140px"
+        gap="20px"
+      >
         <Box
-          display="grid"
-          gridTemplateColumns="repeat(6, 3fr)"
-          gridAutoRows="140px"
-          gap="20px"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          gridColumn="span 6"
         >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            gridColumn="span 6"
-          >
-            <Header title="TOTAL Jobs" subtitle="Managing the All JObs" />
-            <Button variant="contained" color="primary">
-              DELETE JOBS
-            </Button>
-          </Box>
+          <Header title="TOTAL Jobs" subtitle="Managing the All JObs" />
+          <Button variant="contained" color="primary">
+            DELETE JOBS
+          </Button>
         </Box>
+      </Box>
 
-        <Button
+      <Button
         variant="contained"
         onClick={handleBack}
         startIcon={<ArrowBackIcon />}
@@ -102,7 +102,7 @@ const DailyEnterpreneurJobs = () => {
       <Box my={3} backgroundColor={colors.primary[400]} p={4}>
         <Box
           display="flex"
-          flexWrap="wrap" // Ensures items wrap to the next line
+          flexWrap="wrap"
           gap={2}
           overflow="hidden" // Removes scrollbar
         >
@@ -131,7 +131,7 @@ const DailyEnterpreneurJobs = () => {
                       padding: "0.5rem",
                     }}
                   >
-                    {/* <TbBrandNeteaseMusic /> */}
+
                   </IconButton>
                   <Box>
                     <Typography variant="h6" fontWeight="bold" style={{ color: "#4CCEAC" }}>
